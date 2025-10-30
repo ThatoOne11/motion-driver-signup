@@ -1,0 +1,177 @@
+<div class="auth-page">
+  <!-- Full-width sloped background band -->
+  <div class="sloped-bg" aria-hidden="true"></div>
+  <!-- Page-wide decorative circles -->
+  <div class="confetti" aria-hidden="true">
+    <img class="dot d1" src="assets/images/circle_1.png" alt="" />
+    <img class="dot d2" src="assets/images/circle_2.png" alt="" />
+    <img class="dot d3" src="assets/images/circle_1.png" alt="" />
+    <img class="dot d4" src="assets/images/circle_2.png" alt="" />
+    <img class="dot d5" src="assets/images/circle_1.png" alt="" />
+  </div>
+  <div class="hero">
+    <mat-icon class="logo" svgIcon="logo"></mat-icon>
+    <h1 class="welcome">
+      @if (authMode() === "register") {
+        <span class="line-1">Join the MotionAds</span>
+        <span class="line-2">Driver Team</span>
+      } @else {
+        <span class="line-1">Welcome Back to the</span>
+        <span class="line-2">MotionAds Driver Team</span>
+      }
+    </h1>
+    <p class="byline">
+      @if (authMode() !== "register") {
+        Please enter your details below to<br />sign into your driver account
+      }
+    </p>
+  </div>
+
+  @if (authMode() === "login") {
+    <form [formGroup]="loginFormGroup" class="form-card auth-form">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email Address</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          placeholder="enter your email address.."
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hide() ? 'password' : 'text'"
+          placeholder="enter your password.."
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clickEvent($event)"
+          [attr.aria-label]="hide() ? 'Show password' : 'Hide password'"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="actions">
+        <button type="button" class="link" (click)="requestPasswordReset()">
+          Forgot Password?
+        </button>
+      </div>
+      <button
+        mat-flat-button
+        color="primary"
+        class="submit"
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="loginFormGroup.invalid"
+      >
+        SIGN IN
+      </button>
+      @if (resetPasswordMessage()) {
+        <p class="status" [class.error]="isError()">
+          {{ resetPasswordMessage() }}
+        </p>
+      }
+      <p class="legal">
+        By continuing you agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </form>
+
+    <div class="signup-cta">
+      <button class="signup-image-button" (click)="switchMode('register')">
+        <img
+          src="assets/images/sign_up.png"
+          alt="Sign up to become a MotionAds Driver"
+          class="signup-image"
+        />
+      </button>
+    </div>
+  } @else {
+    <!-- Register info banner (image) -->
+    <div class="register-info" aria-hidden="false">
+      <img
+        src="assets/images/register_bike.png"
+        alt="Discover the benefits of being a MotionAds Driver"
+        class="register-info-img"
+      />
+    </div>
+    <p class="register-byline">
+      Please enter your details below to<br />create your driver account
+    </p>
+    <form
+      [formGroup]="registerFormGroup"
+      class="form-card auth-form register-form"
+    >
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Full name</mat-label>
+        <input matInput formControlName="fullName" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Phone number</mat-label>
+        <input
+          matInput
+          formControlName="phone"
+          type="tel"
+          placeholder=""
+          required
+        />
+      </mat-form-field>
+      @if (
+        registerFormGroup.get("phone")?.touched &&
+        registerFormGroup.get("phone")?.hasError("required")
+      ) {
+        <p class="status error">Phone number is required.</p>
+      }
+      @if (
+        registerFormGroup.get("phone")?.touched &&
+        registerFormGroup.get("phone")?.hasError("pattern")
+      ) {
+        <p class="status error">Phone must start with 0 and be 10 digits.</p>
+      }
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email Address</mat-label>
+        <input matInput formControlName="email" required />
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="submit"
+        type="button"
+        (click)="register()"
+        [disabled]="registerFormGroup.invalid"
+      >
+        Create driver account
+      </button>
+      <p class="legal">
+        By continuing you agree to our
+        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+      @if (registerMessage()) {
+        <p class="status" [class.error]="registerError()">
+          {{ registerMessage() }}
+        </p>
+      }
+    </form>
+    <div class="register-bottom-cta">
+      <p class="have-account">
+        Already a Motion Driver?
+        <span class="accent">Sign In below.</span>
+      </p>
+      <button
+        mat-flat-button
+        color="primary"
+        class="bottom-signin"
+        type="button"
+        (click)="switchMode('login')"
+      >
+        SIGN IN
+      </button>
+    </div>
+  }
+</div>

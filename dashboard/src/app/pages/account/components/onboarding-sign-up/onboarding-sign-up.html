@@ -1,0 +1,32 @@
+<div class="page">
+  <div class="content">
+    <div class="logo-container">
+      <mat-icon class="logo" svgIcon="logo"></mat-icon>
+    </div>
+    @if (errorMessage()) {
+      <p class="error-text">{{ errorMessage() }}</p>
+    } @else {
+      @if (mode() === "pending") {
+        <mat-icon class="mail">mark_email_unread</mat-icon>
+        <app-page-title [title]="'Check your WhatsApp'"></app-page-title>
+        <p class="description">
+          Thank you for signing up to Motion Ads to be a driver. We have send a
+          WhatsApp with a confirmation link for you to confirm your detials.
+          Please click the link in the WhatsApp message to continue your Motion
+          Ads driver journey
+        </p>
+        <button mat-flat-button class="primary" (click)="toLogin()">
+          Back to sign in
+        </button>
+      } @else {
+        <mat-icon class="check">check_circle_outline</mat-icon>
+        <app-page-title
+          [title]="'Your email has been verified!'"
+        ></app-page-title>
+        <button class="reset-button" mat-flat-button (click)="ResetPassword()">
+          Reset password
+        </button>
+      }
+    }
+  </div>
+</div>

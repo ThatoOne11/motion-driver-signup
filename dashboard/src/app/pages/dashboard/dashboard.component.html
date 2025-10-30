@@ -1,0 +1,50 @@
+<div class="dash-shell" *ngIf="!loading; else loadingTpl">
+  <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
+
+  <section class="user-card">
+    <h2>User</h2>
+    <div><b>Email:</b> {{ authEmail }}</div>
+    <div><b>Name:</b> {{ profile?.display_name || "—" }}</div>
+    <div><b>Phone:</b> {{ profile?.phone_number || "—" }}</div>
+    <div>
+      <b>Documents Uploaded:</b>
+      {{ profile?.documents_uploaded ? "Yes" : "No" }}
+    </div>
+  </section>
+
+  <section class="extractions">
+    <h2>Extracted Documents</h2>
+    <div *ngIf="!extractions.length">No extraction data yet.</div>
+    <div *ngFor="let x of extractions" class="extract-item">
+      <div class="row">
+        <div><b>Type:</b> {{ x.doc_type_name }}</div>
+        <div><b>Date:</b> {{ x.created_at | date: "medium" }}</div>
+      </div>
+      <div class="row">
+        <div><b>Path:</b> {{ x.storage_path || "—" }}</div>
+        <div [class.flag]="x.extraction_data_error">
+          <b>Valid:</b> {{ x.extraction_data_error ? "Needs attention" : "OK" }}
+        </div>
+      </div>
+      <pre class="json">{{ x.fields_json | json }}</pre>
+      <img
+        *ngIf="x.image_url"
+        [src]="x.image_url"
+        alt="Top Box Photo"
+        class="doc-image"
+      />
+    </div>
+
+    <!-- Show Top Box Photo even if there was no extraction row -->
+    <div *ngIf="topBoxImageUrl" class="extract-item">
+      <div class="row">
+        <div><b>Type:</b> Top Box Photo</div>
+      </div>
+      <img [src]="topBoxImageUrl" alt="Top Box Photo" class="doc-image" />
+    </div>
+  </section>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">Loading dashboard…</div>
+</ng-template>

@@ -1,0 +1,48 @@
+.dash-shell {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+.user-card,
+.extractions {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.extract-item {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+}
+.extract-item .row {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+.json {
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 6px;
+  overflow: auto;
+}
+.doc-image {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  max-width: 480px; /* limit on large screens */
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.flag {
+  color: #b00020;
+}
+.error {
+  color: #b00020;
+}
+.loading {
+  opacity: 0.7;
+  padding: 16px;
+}

@@ -1,0 +1,54 @@
+.page {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  max-width: 353px;
+  gap: 24px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+  .avatar mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--mat-sys-primary);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .name {
+    font-weight: 350;
+    font-size: 20px;
+  }
+
+  .email {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.logout-button {
+  background-color: var(--mat-sys-primary);
+  color: white;
+  font-weight: 500;
+  width: 100%;
+}

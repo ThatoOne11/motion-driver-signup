@@ -1,0 +1,21 @@
+@use "sass:map";
+@use "@theme/theme-colors.scss" as theme;
+
+.app-global-content {
+  .content {
+    padding: 24px;
+  }
+
+  h1 {
+    text-align: center;
+    max-width: 350px;
+    color: map.get(theme.$primary-palette, 20);
+    font-weight: 500;
+  }
+
+  .description {
+    text-align: center;
+    color: map.get(theme.$primary-palette, 40);
+    font-size: 14px;
+  }
+}

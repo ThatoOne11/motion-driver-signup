@@ -1,0 +1,64 @@
+<div class="page">
+  <form class="content">
+    <h2>Multifactor Authentication</h2>
+    <p>
+      For extra security, you'll need to confirm it's really you by using an
+      authenticator app on your phone. This app will give you a code to enter
+      below.
+    </p>
+    <div class="info-buttons">
+      <button matButton="outlined" type="button" (click)="openNeedHelpDialog()">
+        Need help?
+      </button>
+      <button
+        matButton="outlined"
+        type="button"
+        (click)="openNoAuthenticatorDialog()"
+      >
+        I don't have an authenticator app
+      </button>
+    </div>
+    @if(isEnrolledWithMfa == false){
+    <div class="qr-code-container">
+      @if(svgDataUrl){
+      <img [src]="svgDataUrl" alt="MFA QR Code" />
+      } @else{
+      <p>Loading MFA QR Code</p>
+      }
+    </div>
+    }
+    <div class="code-container">
+      @if(isEnrolledWithMfa == false){
+      <mat-label>Sign up code</mat-label>
+
+      } @else{
+      <mat-label>Sign in code</mat-label>
+      }
+
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          required
+          [(ngModel)]="authAppChallengeCode"
+          name="authAppChallengeCode"
+          minlength="6"
+          placeholder="Enter code..."
+        />
+      </mat-form-field>
+      @if (errorMessage()) {
+      <mat-error class="error-text">{{ errorMessage() }}</mat-error>
+      }
+    </div>
+    <button
+      mat-flat-button
+      extended
+      class="continue-button"
+      (click)="submitAuthChallengeCode()"
+      type="button"
+      id="mfa-submit-button"
+      [disabled]="isSubmitting || !authAppChallengeCode"
+    >
+      Continue
+    </button>
+  </form>
+</div>

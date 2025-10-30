@@ -1,0 +1,33 @@
+<div
+  class="uploader"
+  [class.dragging]="dragging"
+  (drop)="onDrop($event)"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+>
+  <div class="label">{{ label }}</div>
+  <div class="dropzone" (click)="$event.preventDefault(); file.click()">
+    <mat-icon>upload</mat-icon>
+    <div class="hint">{{ fileName || "Click to upload." }}</div>
+    <button
+      *ngIf="fileName"
+      mat-icon-button
+      class="remove-icon"
+      (click)="$event.stopPropagation(); onRemoveClick()"
+      aria-label="Remove document"
+      matTooltip="Remove"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="actions" *ngIf="fileName">
+    <button type="button" class="link" (click)="onRemoveClick()">Remove</button>
+  </div>
+  <input
+    #file
+    type="file"
+    [accept]="accept"
+    (change)="onFileInput($event)"
+    hidden
+  />
+</div>

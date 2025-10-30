@@ -1,0 +1,55 @@
+.page {
+  display: flex;
+  justify-content: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  max-width: 420px;
+  gap: 24px;
+}
+.logo-container {
+  width: 353px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+
+  .logo {
+    width: 220px;
+    height: auto;
+  }
+}
+.check {
+  color: var(--mat-sys-primary);
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+.mail {
+  color: var(--mat-sys-primary);
+  width: 48px;
+  height: 48px;
+  font-size: 48px;
+}
+
+.description {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+.primary,
+.reset-button {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.error-text {
+  color: var(--mat-sys-error);
+  text-align: center;
+}

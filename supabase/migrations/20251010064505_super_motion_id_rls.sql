@@ -1,0 +1,1 @@
+alter table public.super_motion_id_counters enable row level security;

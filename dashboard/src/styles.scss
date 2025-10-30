@@ -1,0 +1,138 @@
+@use "@angular/material" as mat;
+@use "./theme/theme-colors" as theme-color;
+@use "app/styles/variables";
+@use "sass:map";
+
+// Global font family for the entire app
+$app-font-family: "Arial Rounded", "Arial Rounded MT", "Arial Rounded MT Bold", Arial, Helvetica, sans-serif;
+
+html {
+  :root {
+    --navbar-height: 100px;
+  }
+  @include mat.theme(
+    (
+      color: theme-color.$primary-palette,
+      typography: (
+        plain-family: $app-font-family,
+        brand-family: $app-font-family,
+        bold-weight: 900,
+        medium-weight: 500,
+        regular-weight: 300,
+      ),
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-height: 40px,
+      filled-container-shape: 8px,
+      outlined-container-height: 40px,
+      outlined-label-text-color: black,
+      outlined-horizontal-padding: 16px,
+      filled-container-color: var(--mat-sys-primary),
+    )
+  );
+  @include mat.menu-overrides(
+    (
+      container-shape: 8px,
+      container-color: white,
+      item-label-text-weight: Regular,
+    )
+  );
+  @include mat.form-field-overrides(
+    (
+      filled-container-color: transparent,
+      filled-active-indicator-height: 0px,
+      filled-focus-active-indicator-height: 0px,
+      hover-state-layer-opacity: 0,
+    )
+  );
+  @include mat.dialog-overrides(
+    (
+      container-min-width: 750px,
+      headline-padding: 24px,
+      content-padding: 24px,
+      supporting-text-color: black,
+    )
+  );
+  @include mat.autocomplete-overrides(
+    (
+      background-color: white,
+      container-shape: 8px,
+    )
+  );
+  /* Neutralize global tinted background */
+  background: #fff;
+  .mat-autocomplete-panel {
+    border: 3px solid #73ad21;
+  }
+  margin: 0px;
+  height: 100vh;
+  font-family:
+    "Arial Rounded", "Arial Rounded MT", "Arial Rounded MT Bold", Arial,
+    Helvetica, sans-serif;
+}
+body {
+  height: 100vh;
+}
+.with-border {
+  border: 1px solid #6b6c75;
+  border-radius: 30px;
+  /* Remove bluish tint */
+  background-color: #fff;
+  height: 56px;
+}
+.main-heading {
+  color: var(--mat-sys-primary);
+  text-align: center;
+  font-weight: 500;
+  font-size: 36px;
+  margin: 0;
+}
+
+h3 {
+  font-weight: 500;
+}
+.remove-icon {
+  cursor: pointer;
+}
+.center-cell {
+  display: flex;
+  align-items: center; // vertically center
+  justify-content: center; // horizontally center
+  height: 100%;
+}
+
+.error-text {
+  color: var(--mat-sys-error);
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+}
+
+// added a wrapper to prevent styles from leaking
+.app-global-content {
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 360px;
+    gap: 24px;
+  }
+}
+
+//button can be used in 404 page, onboarding sign-up, and multifactor authentication
+.full-width-button {
+  margin-top: 24px;
+  width: 100%;
+}
+
+//icon styles that can be used for 404 page and onboarding sign-up
+.mat-icon.icon-styles {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  color: map.get(theme-color.$primary-palette, 40);
+}

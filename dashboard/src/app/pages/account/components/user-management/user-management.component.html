@@ -1,0 +1,26 @@
+<div class="page">
+  <div class="content">
+    <h1 class="main-heading">My Account</h1>
+
+    <div class="profile-card">
+      <div class="avatar">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <div class="details">
+        <div class="name">{{ displayName }}</div>
+        @if (email()) {
+          <div class="email">{{ email() }}</div>
+        }
+      </div>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      class="logout-button"
+      (click)="logout()"
+    >
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
+</div>

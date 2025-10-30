@@ -1,0 +1,21 @@
+<div class="navbar-container">
+  @if(showNavbar){
+  <div class="header">
+    <div class="header-item-container">
+      <mat-icon
+        (click)="navigateTo('dashboard')"
+        class="logo"
+        svgIcon="logo"
+      ></mat-icon>
+    </div>
+    <div class="header-item-container">
+      <button mat-button (click)="goToAccount()">
+        <div class="user-label">
+          <span>{{ displayName }}</span>
+          <mat-icon>account_circle</mat-icon>
+        </div>
+      </button>
+    </div>
+  </div>
+  }
+</div>

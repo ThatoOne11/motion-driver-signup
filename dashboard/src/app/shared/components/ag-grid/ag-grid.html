@@ -1,0 +1,10 @@
+<ag-grid-angular
+  [rowData]="rowData"
+  [columnDefs]="columnDefinitions"
+  [modules]="modules"
+  [theme]="theme"
+  [gridOptions]="gridOptions"
+  [rowSelection]="'multiple'"
+  class="ag-theme-material"
+  (selectionChanged)="onSelectionChanged($event)"
+></ag-grid-angular>

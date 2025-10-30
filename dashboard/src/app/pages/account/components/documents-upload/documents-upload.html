@@ -1,0 +1,72 @@
+<div class="auth-page">
+  <h1 class="title">Upload Your Documents</h1>
+  <p class="subtitle">
+    Please upload the following documents in JPEG, PNG or PDF format.
+  </p>
+
+  <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
+  <div class="success" *ngIf="successMsg">{{ successMsg }}</div>
+
+  <form [formGroup]="form" class="doc-grid">
+    <app-document-uploader
+      label="Please upload a copy of your driver’s licence."
+      accept="image/*,.pdf"
+      [canRemove]="!!form.value.driversLicence"
+      (fileSelected)="onFileSelected('driversLicence', $event)"
+      (remove)="onRemove('driversLicence')"
+    ></app-document-uploader>
+
+    <app-document-uploader
+      label="Please upload a copy of your licence disc."
+      accept="image/*,.pdf"
+      [canRemove]="!!form.value.licenceDisc"
+      (fileSelected)="onFileSelected('licenceDisc', $event)"
+      (remove)="onRemove('licenceDisc')"
+    ></app-document-uploader>
+
+    <app-document-uploader
+      label="Please upload proof of your ID."
+      accept="image/*,.pdf"
+      [canRemove]="!!form.value.idProof"
+      (fileSelected)="onFileSelected('idProof', $event)"
+      (remove)="onRemove('idProof')"
+    ></app-document-uploader>
+
+    <app-document-uploader
+      label="Please upload proof of your banking details."
+      accept="image/*,.pdf"
+      [canRemove]="!!form.value.bankingProof"
+      (fileSelected)="onFileSelected('bankingProof', $event)"
+      (remove)="onRemove('bankingProof')"
+    ></app-document-uploader>
+
+    <app-document-uploader
+      label="Please upload a photograph of your bike’s top box."
+      accept="image/*"
+      [canRemove]="!!form.value.topBoxPhoto"
+      (fileSelected)="onFileSelected('topBoxPhoto', $event)"
+      (remove)="onRemove('topBoxPhoto')"
+    ></app-document-uploader>
+  </form>
+
+  <div class="actions">
+    <button
+      mat-flat-button
+      color="primary"
+      [disabled]="form.invalid || loading"
+      (click)="onContinue()"
+    >
+      <ng-container *ngIf="!loading; else loadingTpl">Continue</ng-container>
+    </button>
+    <ng-template #loadingTpl>
+      <span class="btn-loading">
+        <mat-progress-spinner
+          mode="indeterminate"
+          [diameter]="16"
+          [strokeWidth]="3"
+        ></mat-progress-spinner>
+        <span class="loading-text">Processing…</span>
+      </span>
+    </ng-template>
+  </div>
+</div>

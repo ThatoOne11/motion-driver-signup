@@ -1,0 +1,131 @@
+<div class="auth-page">
+  <div class="top-actions">
+    <button mat-stroked-button color="primary" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+  </div>
+  <h1 class="title">Complete your driver profile</h1>
+  <p class="subtitle">Tell us a bit about your driving</p>
+
+  <form [formGroup]="form" class="auth-form register-form">
+    <div class="error-box" *ngIf="submitError as err">{{ err }}</div>
+    <!-- Province first -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Province</mat-label>
+      <mat-select formControlName="province" required [disabled]="isSubmitting">
+        <mat-option *ngFor="let p of provinces()" [value]="p.id">
+          {{ p.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- City (disabled until province selected) -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>City</mat-label>
+      <mat-select formControlName="city" required [disabled]="isSubmitting">
+        <mat-option *ngFor="let c of cities()" [value]="c.id">{{
+          c.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Suburb (switches to input when Province=Other and City=Other) -->
+    <ng-container *ngIf="!isFreeTextSuburb(); else suburbTextField">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Suburb</mat-label>
+        <mat-select formControlName="suburb" required [disabled]="isSubmitting">
+          <mat-option *ngFor="let s of suburbs()" [value]="s.id">{{
+            s.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+    <ng-template #suburbTextField>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Suburb</mat-label>
+        <input
+          matInput
+          formControlName="suburb"
+          [disabled]="isSubmitting"
+          placeholder="Type your suburb"
+          required
+        />
+      </mat-form-field>
+    </ng-template>
+
+    <!-- Platforms -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Which companies do you drive for?</mat-label>
+      <mat-select
+        formControlName="platforms"
+        multiple
+        required
+        [disabled]="isSubmitting"
+      >
+        <mat-option *ngFor="let p of platforms()" [value]="p.id">
+          {{ p.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Bike ownership -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Bike ownership</mat-label>
+      <mat-select
+        formControlName="bikeOwnership"
+        required
+        [disabled]="isSubmitting"
+      >
+        <mat-option *ngFor="let b of bikeOwnershipTypes()" [value]="b.id">
+          {{ b.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Days per week -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Days per week delivering</mat-label>
+      <mat-select
+        formControlName="daysPerWeek"
+        required
+        [disabled]="isSubmitting"
+      >
+        <mat-option *ngFor="let d of daysPerWeek()" [value]="d.value">
+          {{ d.value }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Years driving -->
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Years driving</mat-label>
+      <mat-select
+        formControlName="yearsDriving"
+        required
+        [disabled]="isSubmitting"
+      >
+        <mat-option *ngFor="let y of yearsDrivingOptions()" [value]="y.id">
+          {{ y.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="submit"
+      type="button"
+      [disabled]="form.invalid || isSubmitting"
+      (click)="saveAndContinue()"
+    >
+      <ng-container *ngIf="!isSubmitting; else loadingTpl"
+        >Save & Continue</ng-container
+      >
+      <ng-template #loadingTpl>
+        <span class="spinner"></span>
+        Saving...
+      </ng-template>
+    </button>
+  </form>
+</div>
