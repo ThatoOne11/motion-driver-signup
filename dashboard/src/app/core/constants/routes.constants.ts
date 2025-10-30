@@ -2,6 +2,7 @@
 export namespace RoutePaths {
   export const ACCOUNT = 'account';
   export const DASHBOARD = 'dashboard';
+  export const INSPECTOR = 'inspector';
 }
 export namespace AccountRoutePaths {
   export const PASSWORD_RESET = `/${RoutePaths.ACCOUNT}/password-reset`;
@@ -30,3 +31,4 @@ export namespace AccountRouteSubPaths {
 
 export const ADMIN_LANDING_PAGE = `/${RoutePaths.DASHBOARD}`;
 export const CLIENT_LANDING_PAGE = `/${RoutePaths.DASHBOARD}`;
+export const INSPECTOR_LANDING_PAGE = `/${RoutePaths.INSPECTOR}`;

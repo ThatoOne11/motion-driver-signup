@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  padding: 2rem;
+}
+.inspector-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}

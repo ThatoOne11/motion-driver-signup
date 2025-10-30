@@ -3,13 +3,14 @@ import { RoutePaths } from '@core/constants/routes.constants';
 import { authGuard } from '@core/guards/auth.guard';
 import { authAndMfaGuard } from '@core/guards/auth-and-mfa.guard';
 import { driverRegistrationGuard } from '@core/guards/driver-registration.guard';
+import { inspectorGuard } from '@core/guards/inspector.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
+        (m) => m.DashboardComponent,
       ),
     canActivate: [authAndMfaGuard, driverRegistrationGuard],
   },
@@ -35,15 +36,23 @@ export const routes: Routes = [
     path: RoutePaths.DASHBOARD,
     loadComponent: () =>
       import('./pages/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
+        (m) => m.DashboardComponent,
       ),
     canActivate: [authAndMfaGuard, driverRegistrationGuard],
+  },
+  {
+    path: RoutePaths.INSPECTOR,
+    loadComponent: () =>
+      import('./pages/inspector/inspector.component').then(
+        (m) => m.InspectorComponent,
+      ),
+    canActivate: [authAndMfaGuard, inspectorGuard],
   },
   {
     path: '**',
     loadComponent: () =>
       import('./pages/not-found/not-found.component').then(
-        (m) => m.NotFoundComponent
+        (m) => m.NotFoundComponent,
       ),
   },
 ];
