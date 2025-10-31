@@ -16,11 +16,6 @@ insert into
 values
     ('686c928b-034c-4858-862c-9ccb32226c2f', 'driver') on conflict (id) do nothing;
 
-insert into
-  public.roles (id, name)
-values
-  ('2a1b9b8b-3f0e-4c1c-8f2c-6d9b3a2a1a0f', 'inspector') on conflict (id) do nothing;
-
 -- Seed static lookup tables
 insert into
     public.platforms (name)

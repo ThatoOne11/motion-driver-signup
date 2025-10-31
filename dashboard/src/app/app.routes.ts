@@ -3,7 +3,6 @@ import { RoutePaths } from '@core/constants/routes.constants';
 import { authGuard } from '@core/guards/auth.guard';
 import { authAndMfaGuard } from '@core/guards/auth-and-mfa.guard';
 import { driverRegistrationGuard } from '@core/guards/driver-registration.guard';
-import { inspectorGuard } from '@core/guards/inspector.guard';
 
 export const routes: Routes = [
   {
@@ -46,7 +45,7 @@ export const routes: Routes = [
       import('./pages/inspector/inspector.component').then(
         (m) => m.InspectorComponent,
       ),
-    canActivate: [authAndMfaGuard, inspectorGuard],
+    canActivate: [authAndMfaGuard],
   },
   {
     path: '**',

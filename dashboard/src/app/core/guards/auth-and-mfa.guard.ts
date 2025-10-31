@@ -3,7 +3,13 @@ import { inject } from '@angular/core';
 import { getItem } from '@core/store/session.store';
 import { AuthConstants } from '@core/constants/auth.constants';
 import { RoleRoutePermissions } from '@core/constants/auth.role.route.permissions.constant';
-import { AccountRoutePaths, AccountRouteSubPaths, RoutePaths } from '@core/constants/routes.constants';
+import {
+  AccountRoutePaths,
+  AccountRouteSubPaths,
+  RoutePaths,
+  ADMIN_LANDING_PAGE,
+  INSPECTOR_LANDING_PAGE,
+} from '@core/constants/routes.constants';
 import { environment } from '@environments/environment';
 import { SupabaseClientService } from '@core/services/supabase-client.service';
 import { Roles } from '@core/constants/auth.role.constants';
@@ -18,8 +24,17 @@ export const authAndMfaGuard: CanActivateFn = async (route) => {
   const allowedRoutes = RoleRoutePermissions[userRole] || [];
 
   // Require authentication and route access
-  if (!token || !allowedRoutes.includes(route.routeConfig!.path!)) {
+  if (!token) {
     router.navigate([AccountRoutePaths.LOGIN]);
+    return false;
+  }
+
+  if (!allowedRoutes.includes(route.routeConfig!.path!)) {
+    if (userRole === Roles.INSPECTOR) {
+      router.navigate([INSPECTOR_LANDING_PAGE]);
+    } else {
+      router.navigate([ADMIN_LANDING_PAGE]); // Default for Admins and Drivers
+    }
     return false;
   }
 
@@ -34,7 +49,8 @@ export const authAndMfaGuard: CanActivateFn = async (route) => {
   // Driver registration enforcement: progression gates
   try {
     if (userRole === Roles.DRIVER) {
-      const { data: sessionRes } = await supabase.supabaseClient.auth.getSession();
+      const { data: sessionRes } =
+        await supabase.supabaseClient.auth.getSession();
       const userId = sessionRes.session?.user?.id;
       if (userId) {
         const { data } = await supabase.supabaseClient
@@ -46,7 +62,8 @@ export const authAndMfaGuard: CanActivateFn = async (route) => {
 
         const path = route.routeConfig?.path;
         const onProfile = path === AccountRouteSubPaths.DRIVER_SIGN_UP_FORM;
-        const onDocuments = path === AccountRouteSubPaths.DRIVER_DOCUMENTS_UPLOAD;
+        const onDocuments =
+          path === AccountRouteSubPaths.DRIVER_DOCUMENTS_UPLOAD;
 
         const profileDone = !!data.profile_completed;
         const docsDone = !!data.documents_uploaded;

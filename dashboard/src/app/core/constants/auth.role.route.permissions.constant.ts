@@ -5,4 +5,5 @@ export const RoleRoutePermissions: Record<string, string[]> = {
   [Roles.SUPER_ADMIN]: [RoutePaths.ACCOUNT, RoutePaths.DASHBOARD],
   [Roles.ADMIN]: [RoutePaths.ACCOUNT, RoutePaths.DASHBOARD],
   [Roles.DRIVER]: [RoutePaths.ACCOUNT, RoutePaths.DASHBOARD],
+  [Roles.INSPECTOR]: [RoutePaths.ACCOUNT, RoutePaths.INSPECTOR],
 };
