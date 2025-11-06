@@ -1,0 +1,53 @@
+@use "../../../styles/variables" as v;
+
+/* Confetti dots scattered across page */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+.confetti .dot {
+  position: fixed;
+  width: 22px;
+  height: 22px;
+  opacity: v.$confetti-opacity;
+  z-index: -1;
+}
+
+.confetti .d1 {
+  top: 9vh;
+  left: 10vw;
+}
+.confetti .d2 {
+  top: 14vh;
+  right: 12vw;
+}
+.confetti .d3 {
+  top: 38vh;
+  left: 28vw;
+}
+.confetti .d4 {
+  top: 56vh;
+  right: 22vw;
+}
+.confetti .d5 {
+  top: 82vh;
+  left: 40vw;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .confetti .dot {
+    width: 18px;
+    height: 18px;
+  }
+  .confetti .d2 {
+    top: 12vh;
+    right: 8vw;
+  }
+  .confetti .d4 {
+    top: 60vh;
+    right: 10vw;
+  }
+}

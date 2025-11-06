@@ -92,13 +92,14 @@ export class AuthService {
 
   public async registerDriver(
     email: string,
-    fullName: string,
+    firstName: string,
+    lastName: string,
     phone: string,
     password?: string,
   ): Promise<void> {
     const payload = {
       email,
-      fullName,
+      fullName: `${firstName} ${lastName}`,
       phone,
       password: password ?? this.generateStrongPassword(),
     };

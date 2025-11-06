@@ -1,4 +1,91 @@
-<div class="inspector-container">
-  <h1>Inspector Page</h1>
-  <p>Welcome Inspector.</p>
+<div class="inspector-page">
+  <app-motion-background></app-motion-background>
+
+  <div class="hero">
+    <mat-icon class="logo" svgIcon="logo"></mat-icon>
+    <h1 class="welcome">
+      <span class="line-1">Sign Up an</span>
+      <span class="line-2">Existing Driver</span>
+    </h1>
+  </div>
+
+  <p class="form-byline">
+    This sign-up form is for MotionAds inspectors to add existing drivers.
+  </p>
+  <p class="form-byline-subtext">
+    Please make sure the driver’s details are correct before submitting.
+  </p>
+
+  <form
+    [formGroup]="inspectorForm"
+    (ngSubmit)="createDriver()"
+    class="form-card auth-form"
+  >
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Full name</mat-label>
+      <input matInput formControlName="fullName" required />
+      @if (
+        inspectorForm.controls["fullName"].hasError("required") &&
+        inspectorForm.controls["fullName"].touched
+      ) {
+        <mat-error>Full name is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Phone number</mat-label>
+      <input matInput formControlName="phone" required />
+      @if (
+        inspectorForm.controls["phone"].hasError("required") &&
+        inspectorForm.controls["phone"].touched
+      ) {
+        <mat-error>Phone number is required</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required />
+      @if (
+        inspectorForm.controls["email"].hasError("required") &&
+        inspectorForm.controls["email"].touched
+      ) {
+        <mat-error>Email is required</mat-error>
+      }
+      @if (
+        inspectorForm.controls["email"].hasError("email") &&
+        inspectorForm.controls["email"].touched
+      ) {
+        <mat-error>Please enter a valid email address</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Motion ID</mat-label>
+      <input matInput formControlName="motionId" required />
+      @if (
+        inspectorForm.controls["motionId"].hasError("required") &&
+        inspectorForm.controls["motionId"].touched
+      ) {
+        <mat-error>Motion ID is required</mat-error>
+      }
+    </mat-form-field>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="submit"
+      type="submit"
+      [disabled]="inspectorForm.invalid"
+    >
+      Create driver account
+    </button>
+    <!-- TODO: Setup the actual routes of the actual legal documents. -->
+    <p class="legal">
+      By continuing you agree to our
+      <a [routerLink]="['/terms-of-service']">Terms of Service</a>
+      and
+      <a [routerLink]="['/privacy-policy']">Privacy Policy</a>.
+    </p>
+  </form>
+  <button mat-flat-button class="logout-button" (click)="signOut()">
+    Log Out
+  </button>
 </div>

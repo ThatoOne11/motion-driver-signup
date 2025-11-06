@@ -48,6 +48,13 @@ export const routes: Routes = [
     canActivate: [authAndMfaGuard],
   },
   {
+    path: RoutePaths.INFORMATION,
+    loadChildren: () =>
+      import('@information/routes').then(
+        (m) => m.INFORMATION_ROUTES_WITH_NO_GUARD,
+      ),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./pages/not-found/not-found.component').then(

@@ -188,7 +188,11 @@ Deno.serve(async (req) => {
           } catch (e) {
             console.warn(
               "[document-llm-extract] OCR failed; proceeding with empty text",
-              { requestId, path }
+              {
+                requestId,
+                path,
+                error: e instanceof Error ? e.message : String(e),
+              }
             );
             return { text: "" };
           }
@@ -267,6 +271,11 @@ Deno.serve(async (req) => {
             path,
             keys: Object.keys(extracted ?? {}),
           });
+          console.log("[document-llm-extract] fields", {
+            requestId,
+            path,
+            fields: extracted ?? {},
+          });
         } catch {}
       } catch (err: any) {
         console.error("[document-llm-extract] error", {
@@ -296,6 +305,8 @@ Deno.serve(async (req) => {
         );
       }
     }
+
+    console.log("Finished document extraction");
 
     return new Response(
       JSON.stringify({ HasErrors: hasErrors, Results: results }),

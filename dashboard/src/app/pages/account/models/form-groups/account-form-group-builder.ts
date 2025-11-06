@@ -19,7 +19,8 @@ export class AccountFormGroupBuilder {
 
   buildRegisterForm(): FormGroup {
     return this.fb.group({
-      fullName: ['', [Validators.required]],
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern(/^0\d{9}$/)]],
       email: ['', [Validators.required, Validators.email]],
     });

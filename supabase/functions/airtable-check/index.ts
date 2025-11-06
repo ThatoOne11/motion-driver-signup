@@ -119,9 +119,11 @@ Deno.serve(async (req) => {
     const bypassEnabled = (Deno.env.get("AIRTABLE_BYPASS") ?? "0") === "1";
     if (bypassEnabled) {
       try {
-        const url = new URL("../lib/bypass.json", import.meta.url);
-        const txt = await Deno.readTextFile(url);
-        const json = JSON.parse(txt) as {
+        const json = (
+          await import("./lib/bypass.json", {
+            assert: { type: "json" },
+          })
+        ).default as {
           emails?: string[];
           phone?: string[];
         };
@@ -154,7 +156,17 @@ Deno.serve(async (req) => {
           );
         }
       } catch (e) {
-        log("bypass_read_error", { error: (e as Error).message });
+        const errMsg =
+          e instanceof Error
+            ? e.message
+            : e === undefined
+              ? "unknown"
+              : String(e);
+        if (errMsg.includes("Cannot resolve module")) {
+          log("bypass_missing");
+        } else {
+          log("bypass_read_error", { error: errMsg });
+        }
       }
     }
 

@@ -40,7 +40,8 @@ function buildTokenAndSmsUrl(tokenHash: string) {
     "Please click the link to verify your email!"
   );
   const fullSmsUrl = `${passthroughBase}?title=${message}&passthroughLink=${encodedPassthrough}`;
-  return { tokenForTemplate: message, fullSmsUrl };
+  const tokenForTemplate = `${message}&passthroughLink=${encodedPassthrough}`;
+  return { tokenForTemplate, fullSmsUrl };
 }
 async function sendWhatsappTemplate(
   toPhone: string,

@@ -3,6 +3,7 @@ export namespace RoutePaths {
   export const ACCOUNT = 'account';
   export const DASHBOARD = 'dashboard';
   export const INSPECTOR = 'inspector';
+  export const INFORMATION = 'information';
 }
 export namespace AccountRoutePaths {
   export const PASSWORD_RESET = `/${RoutePaths.ACCOUNT}/password-reset`;
@@ -14,6 +15,18 @@ export namespace AccountRoutePaths {
   export const PENDING_VERIFICATION = `/${RoutePaths.ACCOUNT}/pending-verification`;
   export const DRIVER_SIGN_UP_FORM = `/${RoutePaths.ACCOUNT}/driver-sign-up`;
   export const DRIVER_DOCUMENTS_UPLOAD = `/${RoutePaths.ACCOUNT}/driver-documents`;
+}
+
+export namespace InformationRoutePaths {
+  export const TERMS_OF_SERVICE = `/${RoutePaths.INFORMATION}/terms-of-service`;
+  export const PRIVACY_POLICY = `/${RoutePaths.INFORMATION}/privacy-policy`;
+  export const MORE_INFORMATION = `/${RoutePaths.INFORMATION}/more-information`;
+}
+
+export namespace InformationRouteSubPaths {
+  export const TERMS_OF_SERVICE = 'terms-of-service';
+  export const PRIVACY_POLICY = 'privacy-policy';
+  export const MORE_INFORMATION = 'more-information';
 }
 
 export namespace AccountRouteSubPaths {

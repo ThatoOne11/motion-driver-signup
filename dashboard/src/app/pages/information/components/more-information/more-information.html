@@ -1,0 +1,115 @@
+<div class="more-information">
+  <app-motion-background></app-motion-background>
+  <div class="logo">
+    <button class="back-btn" (click)="close()">
+      <img src="assets/icons/arrow-left.svg" alt="Back" />
+    </button>
+    <img src="assets/icons/logo.svg" alt="Logo" class="main-logo" />
+  </div>
+  <div class="header">
+    <div class="heading-one">
+      <h1>Why Join MotionAds</h1>
+    </div>
+    <div class="heading-two">
+      <h1>as a Driver?</h1>
+    </div>
+  </div>
+
+  <div class="driver-image">
+    <img src="assets/more-information/bike.png" alt="more-information-image" />
+  </div>
+  <div class="header-copy">
+    <p>
+      At MotionAds, we believe our drivers are the heart of everything we do.
+      When you partner with us, you don’t just earn extra income - you join a
+      community that supports you every step of the way.
+    </p>
+  </div>
+
+  <div class="what-header">
+    <h2>What MotionAds Has Done for Drivers</h2>
+  </div>
+</div>
+
+<div class="carousel-container">
+  <div
+    #viewport
+    class="carousel-viewport"
+    (scroll)="onViewportScroll()"
+    (pointerdown)="pauseAuto()"
+    (pointerup)="resumeAuto()"
+    (pointercancel)="resumeAuto()"
+  >
+    <div class="carousel-track">
+      <div class="carousel-slide" *ngFor="let slide of slides; let i = index">
+        <article class="carousel-card" [class.active]="i === currentSlide">
+          <div class="icon-wrapper">
+            <img [src]="slide.icon" alt="slide icon" />
+          </div>
+          <h3>{{ slide.title }}</h3>
+          <p>{{ slide.text }}</p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="carousel-dots">
+    <span
+      *ngFor="let slide of slides; let i = index"
+      (click)="goToSlide(i)"
+      [class.active]="i === currentSlide"
+    ></span>
+  </div>
+</div>
+
+<div class="bottom-more-information">
+  <section class="love-motionads">
+    <h2>Why You'll Love Being a MotionAds Driver</h2>
+    <ul>
+      <li>
+        <span class="badge">✔</span>
+        <p>
+          <strong>Extra earnings</strong> on top of your normal delivery work.
+        </p>
+      </li>
+      <li>
+        <span class="badge">✔</span>
+        <p><strong>Free to join</strong> – no hidden fees.</p>
+      </li>
+      <li>
+        <span class="badge">✔</span>
+        <p>
+          <strong>Simple app &amp; process</strong> designed for all drivers,
+          even on older phones.
+        </p>
+      </li>
+      <li>
+        <span class="badge">✔</span>
+        <p>
+          <strong>Trusted by top brands</strong> like Vodacom, Avo by Nedbank,
+          Sloom, and more.
+        </p>
+      </li>
+      <li>
+        <span class="badge">✔</span>
+        <p>
+          <strong>A driver-first community</strong> – MotionAds is built around
+          supporting you.
+        </p>
+      </li>
+    </ul>
+    <hr class="section-divider" />
+  </section>
+
+  <div class="started">
+    <h1>Ready to Get Started?</h1>
+    <p>
+      Becoming a MotionAds driver is simple, safe, and rewarding. Your
+      information is kept secure, and our team is here to help you every step of
+      the way.
+    </p>
+    <button class="signup-btn">SIGN UP AS A DRIVER TODAY</button>
+  </div>
+
+  <app-support-callout />
+</div>

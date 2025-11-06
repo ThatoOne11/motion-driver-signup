@@ -16,6 +16,7 @@ import { routes } from './app.routes';
 import { loadingInterceptor } from '@core/interceptors/loading.interceptor';
 import { hydrateSessionStore } from '@core/store/session.store';
 import { AuthService } from '@core/services/auth/auth.service';
+import { provideMarkdown } from 'ngx-markdown';
 
 function appInitializer() {
   const auth = inject(AuthService);
@@ -40,5 +41,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
     provideRouter(routes),
     provideAppInitializer(appInitializer),
+    provideMarkdown(),
   ],
 };

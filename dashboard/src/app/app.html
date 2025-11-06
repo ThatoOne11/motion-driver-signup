@@ -1,4 +1,7 @@
-<app-navbar></app-navbar>
+@if (!hideNavbar()) {
+  <app-navbar></app-navbar>
+}
+<router-outlet></router-outlet>
 <app-loader></app-loader>
 <app-toast></app-toast>
 <div class="content">

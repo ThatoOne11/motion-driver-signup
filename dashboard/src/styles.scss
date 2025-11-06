@@ -4,12 +4,16 @@
 @use "sass:map";
 
 // Global font family for the entire app
-$app-font-family: "Arial Rounded", "Arial Rounded MT", "Arial Rounded MT Bold", Arial, Helvetica, sans-serif;
+$app-font-family:
+  "Arial Rounded", "Arial Rounded MT", "Arial Rounded MT Bold", Arial,
+  Helvetica, sans-serif;
+
+:root {
+  --navbar-height: 100px;
+  --close-button-color: #e16341;
+}
 
 html {
-  :root {
-    --navbar-height: 100px;
-  }
   @include mat.theme(
     (
       color: theme-color.$primary-palette,

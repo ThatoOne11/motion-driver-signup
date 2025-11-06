@@ -7,7 +7,7 @@ import {
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '@core/services/auth/auth.service';
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MfaAuthService } from '@core/services/auth/auth.mfa.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -16,9 +16,11 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   AccountRoutePaths,
   AccountRouteSubPaths,
+  InformationRoutePaths,
 } from '@core/constants/routes.constants';
 import { RoutesService } from '@core/services/routes.service';
 import { environment } from '@environments/environment';
+import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
 
 @Component({
   selector: 'app-account-access',
@@ -28,6 +30,8 @@ import { environment } from '@environments/environment';
     MatIconModule,
     MatInputModule,
     MatButtonModule,
+    MotionBackgroundComponent,
+    RouterLink,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './auth.flow.component.html',
@@ -43,6 +47,10 @@ export class AccountAccessComponent implements OnInit {
   protected accountFormGroupBuilder: AccountFormGroupBuilder;
   protected loginFormGroup: FormGroup;
   protected registerFormGroup: FormGroup;
+  protected readonly termsRoute = InformationRoutePaths.TERMS_OF_SERVICE;
+  protected readonly privacyRoute = InformationRoutePaths.PRIVACY_POLICY;
+  protected readonly moreInformationRoute =
+    InformationRoutePaths.MORE_INFORMATION;
 
   constructor() {
     this.accountFormGroupBuilder = new AccountFormGroupBuilder(
@@ -155,10 +163,10 @@ export class AccountAccessComponent implements OnInit {
     if (this.registerFormGroup.invalid) {
       return;
     }
-    const { fullName, phone, email } = this.registerFormGroup.value;
+    const { firstName, lastName, phone, email } = this.registerFormGroup.value;
 
     try {
-      await this.authService.registerDriver(email, fullName, phone);
+      await this.authService.registerDriver(email, firstName, lastName, phone);
       this.router.navigate([AccountRoutePaths.PENDING_VERIFICATION]);
     } catch (error: any) {
       console.error('Registration failed:', error);

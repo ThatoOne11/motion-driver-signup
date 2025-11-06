@@ -1,14 +1,6 @@
 <div class="auth-page">
-  <!-- Full-width sloped background band -->
-  <div class="sloped-bg" aria-hidden="true"></div>
-  <!-- Page-wide decorative circles -->
-  <div class="confetti" aria-hidden="true">
-    <img class="dot d1" src="assets/images/circle_1.png" alt="" />
-    <img class="dot d2" src="assets/images/circle_2.png" alt="" />
-    <img class="dot d3" src="assets/images/circle_1.png" alt="" />
-    <img class="dot d4" src="assets/images/circle_2.png" alt="" />
-    <img class="dot d5" src="assets/images/circle_1.png" alt="" />
-  </div>
+  <app-motion-background></app-motion-background>
+
   <div class="hero">
     <mat-icon class="logo" svgIcon="logo"></mat-icon>
     <h1 class="welcome">
@@ -78,7 +70,8 @@
       }
       <p class="legal">
         By continuing you agree to our
-        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        <a [routerLink]="termsRoute">Terms of Service</a> and
+        <a [routerLink]="privacyRoute">Privacy Policy</a>.
       </p>
     </form>
 
@@ -95,6 +88,7 @@
     <!-- Register info banner (image) -->
     <div class="register-info" aria-hidden="false">
       <img
+        [routerLink]="moreInformationRoute"
         src="assets/images/register_bike.png"
         alt="Discover the benefits of being a MotionAds Driver"
         class="register-info-img"
@@ -108,8 +102,12 @@
       class="form-card auth-form register-form"
     >
       <mat-form-field appearance="outline" class="field">
-        <mat-label>Full name</mat-label>
-        <input matInput formControlName="fullName" required />
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName" required />
       </mat-form-field>
       <mat-form-field appearance="outline" class="field">
         <mat-label>Phone number</mat-label>
@@ -150,7 +148,8 @@
       </button>
       <p class="legal">
         By continuing you agree to our
-        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        <a [routerLink]="termsRoute">Terms of Service</a> and
+        <a [routerLink]="privacyRoute">Privacy Policy</a>.
       </p>
       @if (registerMessage()) {
         <p class="status" [class.error]="registerError()">

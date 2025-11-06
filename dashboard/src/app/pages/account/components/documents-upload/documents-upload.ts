@@ -104,47 +104,19 @@ export class DocumentsUploadComponent implements OnInit {
     this.cdr.detectChanges();
 
     try {
-      const invoke = async (name: string) => {
-        const p = this.supabase.functions.invoke(name, { body: {} });
-        const res: any = await Promise.race([
-          p,
-          new Promise((resolve) =>
-            setTimeout(() => resolve({ timeout: true }), 20000),
-          ),
-        ]);
-        if (res?.timeout) return { timedOut: true } as any;
-        return res as { data: any; error: any };
-      };
-
-      // Run LLM extractor for structured fields only
-      const llm = await invoke('document-llm-extraction');
-      if (llm?.timedOut) {
-        this.errorMsg = 'LLM extraction timed out. Please try again.';
+      const { data, error } = await this.supabase.functions.invoke(
+        'document-llm-extraction',
+        { body: {} },
+      );
+      if (error) {
+        this.errorMsg = error?.message || 'Document extraction failed.';
         return;
       }
-      if (llm?.error) {
-        this.errorMsg = llm.error?.message || 'LLM extraction failed.';
-        return;
-      }
-      if (llm?.data?.HasErrors) {
+      if (data?.HasErrors) {
         this.errorMsg =
-          llm.data?.Message || 'LLM could not extract all fields.';
+          data?.Message || 'Document extraction could not extract all fields.';
         return;
       }
-
-      // Log extracted fields for inspection
-      try {
-        const res = (llm?.data?.Results ?? []) as Array<any>;
-        for (const r of res) {
-          // eslint-disable-next-line no-console
-          console.log(
-            '[document-llm-extract] fields for',
-            r.path,
-            '\n',
-            r.fields || r.error,
-          );
-        }
-      } catch {}
 
       await this.router.navigate([`/${RoutePaths.DASHBOARD}`]);
     } catch (e: any) {

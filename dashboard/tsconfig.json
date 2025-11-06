@@ -23,8 +23,10 @@
       "@core/*": ["src/app/core/*"],
       "@environments/*": ["src/environments/*"],
       "@account/*": ["src/app/pages/account/*"],
+      "@information/*": ["src/app/pages/information/*"],
       "@static/*": ["src/app/pages/static/*"],
       "@shared-components/*": ["src/app/shared/components/*"],
+      "@styles/*": ["src/app/styles/*"],
       "@theme/*": ["src/theme/*"],
       "@images/*": ["src/assets/images/*"]
     }
