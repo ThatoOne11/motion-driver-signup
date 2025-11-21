@@ -1,5 +1,6 @@
 // deno-lint-ignore-file no-explicit-any
 import { FunctionResponseType } from "../../_shared/models.ts";
+import { getEnvBool } from "../../_shared/config.ts";
 
 function getAirtableEnv() {
   const token = Deno.env.get("AIRTABLE_ACCESS_TOKEN");
@@ -20,7 +21,7 @@ export async function queryByFormula(
 ): Promise<FunctionResponseType> {
   try {
     const reqId = crypto.randomUUID();
-    const LOG = (Deno.env.get("LOG_AIRTABLE_CHECK") ?? "1") === "1";
+    const LOG = getEnvBool("LOG_AIRTABLE_CHECK", true);
     const log = (...args: any[]) => {
       if (LOG) console.log("[airtable-check:service]", reqId, ...args);
     };
@@ -54,7 +55,11 @@ export async function queryByFormula(
       Data: { recordIds: records.map((r) => r.id) },
     } as unknown as FunctionResponseType;
   } catch (e) {
-    console.error("[airtable-check:service]", "exception", (e as Error).message);
+    console.error(
+      "[airtable-check:service]",
+      "exception",
+      (e as Error).message
+    );
     return {
       Message: "Airtable query exception",
       HasErrors: true,

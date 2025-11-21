@@ -6,6 +6,4 @@ export const environment = {
   turnstileKey: '',
   enforceEmailPassthrough: false,
   enforceMfa: false,
-  registerDriverUrl:
-    'https://azvgjxdpblpfkfqgriqk.supabase.co/functions/v1/register-driver',
 };

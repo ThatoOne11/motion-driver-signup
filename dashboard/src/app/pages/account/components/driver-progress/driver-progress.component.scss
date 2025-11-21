@@ -1,0 +1,220 @@
+.progress-wrapper {
+  width: min(760px, 100%);
+  margin: 0 auto 24px;
+  padding: 0 clamp(24px, 8vw, 56px) 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: clamp(16px, 4vw, 24px);
+}
+
+.progress-label {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(8px, 3vw, 16px);
+  font-size: clamp(14px, 3.6vw, 18px);
+  color: rgba(0, 0, 0, 0.6);
+  flex-wrap: nowrap;
+  max-width: clamp(240px, 90vw, 640px);
+  justify-content: center;
+}
+
+.percent {
+  font-size: clamp(20px, 6vw, 28px);
+  font-weight: 700;
+  color: var(--mat-sys-secondary);
+}
+.message {
+  font-size: clamp(14px, 3.6vw, 18px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track {
+  position: relative;
+  width: clamp(240px, 80vw, 640px);
+  height: clamp(12px, 3.6vw, 16px);
+  border-radius: 999px;
+  background: #d9d9d9;
+  --progress: 0%;
+  margin-top: clamp(10px, 3vw, 16px);
+}
+
+.fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--mat-sys-secondary);
+  transition: width 280ms ease;
+}
+
+.bike-holder {
+  position: absolute;
+  top: 50%;
+  left: var(--progress);
+  transform: translate(0%, -10%);
+  transition: left 280ms ease;
+  pointer-events: none;
+}
+
+.bike {
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+  animation: bikeDrive 1400ms ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.bike.idle {
+  animation-play-state: paused;
+}
+
+.bike.rev-a,
+.bike.rev-b {
+  animation:
+    bikeDrive 1400ms ease-in-out infinite,
+    bikeRev 900ms ease;
+  animation-play-state: running;
+}
+
+.confetti-burst {
+  position: absolute;
+  top: -6px;
+  left: 6px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.confetti-burst .particle {
+  position: absolute;
+  width: 6px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(0, 0) scale(0.4);
+}
+
+.confetti-burst.active .particle {
+  opacity: 1;
+}
+
+.confetti-burst.burst-a .particle {
+  animation: confettiFlyA 900ms ease-out forwards;
+}
+
+.confetti-burst.burst-b .particle {
+  animation: confettiFlyB 900ms ease-out forwards;
+}
+
+.particle.p1 {
+  --x: 16px;
+  --y: -60px;
+  background: #ff5b5b;
+}
+.particle.p2 {
+  --x: 34px;
+  --y: -72px;
+  background: #ffd166;
+}
+.particle.p3 {
+  --x: 4px;
+  --y: -70px;
+  background: #06d6a0;
+}
+.particle.p4 {
+  --x: 24px;
+  --y: -48px;
+  background: #118ab2;
+}
+.particle.p5 {
+  --x: -6px;
+  --y: -56px;
+  background: #ef476f;
+}
+.particle.p6 {
+  --x: 12px;
+  --y: -84px;
+  background: #8338ec;
+}
+
+@keyframes confettiFlyA {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(1) rotate(320deg);
+    opacity: 0;
+  }
+}
+
+@keyframes confettiFlyB {
+  0% {
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--x) * 1.1), calc(var(--y) * 1.1)) scale(1.1)
+      rotate(-280deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bikeRev {
+  0% {
+    transform: translate(-55%, -78%) rotate(0deg);
+  }
+  15% {
+    transform: translate(calc(-55% - 12px), -76%) rotate(-4deg);
+  }
+  35% {
+    transform: translate(-55%, -78%) rotate(0deg);
+  }
+  55% {
+    transform: translate(-55%, -92%) rotate(10deg);
+  }
+  80% {
+    transform: translate(-55%, -82%) rotate(-2deg);
+  }
+  100% {
+    transform: translate(-55%, -78%) rotate(0deg);
+  }
+}
+
+@keyframes bikeDrive {
+  0% {
+    transform: translate(-55%, -78%) rotate(0deg);
+  }
+  25% {
+    transform: translate(-55%, -80%) rotate(-1deg);
+  }
+  50% {
+    transform: translate(-55%, -83%) rotate(1.5deg);
+  }
+  75% {
+    transform: translate(-55%, -79%) rotate(-0.5deg);
+  }
+  100% {
+    transform: translate(-55%, -78%) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .progress-wrapper {
+    padding: 0 18px 12px;
+    gap: 16px;
+  }
+
+  .progress-label {
+    flex-wrap: wrap;
+    font-size: 16px;
+    gap: 10px;
+  }
+
+  .percent {
+    font-size: 24px;
+  }
+}

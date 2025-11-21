@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -10,11 +9,13 @@ import {
 import { Location } from '@angular/common';
 import { SupportCalloutComponent } from '@core/components/support-callout/support-callout';
 import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
+import { AccountRoutePaths } from '@core/constants/routes.constants';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-more-information',
   standalone: true,
-  imports: [CommonModule, SupportCalloutComponent, MotionBackgroundComponent],
+  imports: [SupportCalloutComponent, MotionBackgroundComponent, RouterLink],
   templateUrl: './more-information.html',
   styleUrls: ['./more-information.scss'],
 })
@@ -50,6 +51,8 @@ export class MoreInformation implements OnInit, AfterViewInit, OnDestroy {
   private ignoreScroll = false;
   private ignoreReleaseId: any;
   private scrollDebounceId: any;
+
+  protected readonly signInRoute = AccountRoutePaths.REGISTER;
 
   constructor(private readonly location: Location) {}
 

@@ -12,7 +12,6 @@
   width: 100%;
   min-height: 100vh;
   position: relative;
-  background: v.$surface;
   box-sizing: border-box;
   padding-top: 0px;
 }
@@ -34,6 +33,18 @@
     width: 160px;
     height: auto;
     margin-bottom: 12px;
+  }
+
+  //conditionally visible icon
+  .info-icon {
+    position: absolute;
+    right: 24px;
+    top: 45px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    color: var(--mat-sys-primary);
+    display: none; //hidden by default
   }
 
   .welcome {
@@ -71,11 +82,9 @@
     width: clamp(v.$form-card-min-width, 90vw, v.$form-card-max-width);
     background: v.$surface;
     border: 1.5px solid var(--mat-sys-secondary);
-    border-radius: 12px;
-    box-shadow: 0 10px 24px v.$card-shadow;
+    border-radius: 16px;
     padding: 20px 20px 24px;
     position: relative;
-    z-index: 2;
     box-sizing: border-box;
   }
 

@@ -41,24 +41,24 @@
     (pointercancel)="resumeAuto()"
   >
     <div class="carousel-track">
-      <div class="carousel-slide" *ngFor="let slide of slides; let i = index">
-        <article class="carousel-card" [class.active]="i === currentSlide">
-          <div class="icon-wrapper">
-            <img [src]="slide.icon" alt="slide icon" />
-          </div>
-          <h3>{{ slide.title }}</h3>
-          <p>{{ slide.text }}</p>
-        </article>
-      </div>
+      @for (slide of slides; track slide; let i = $index) {
+        <div class="carousel-slide">
+          <article class="carousel-card" [class.active]="i === currentSlide">
+            <div class="icon-wrapper">
+              <img [src]="slide.icon" alt="slide icon" />
+            </div>
+            <h3>{{ slide.title }}</h3>
+            <p>{{ slide.text }}</p>
+          </article>
+        </div>
+      }
     </div>
   </div>
 
   <div class="carousel-dots">
-    <span
-      *ngFor="let slide of slides; let i = index"
-      (click)="goToSlide(i)"
-      [class.active]="i === currentSlide"
-    ></span>
+    @for (slide of slides; track slide; let i = $index) {
+      <span (click)="goToSlide(i)" [class.active]="i === currentSlide"></span>
+    }
   </div>
 </div>
 
@@ -108,7 +108,9 @@
       information is kept secure, and our team is here to help you every step of
       the way.
     </p>
-    <button class="signup-btn">SIGN UP AS A DRIVER TODAY</button>
+    <button class="signup-btn" [routerLink]="signInRoute">
+      SIGN UP AS A DRIVER TODAY
+    </button>
   </div>
 
   <app-support-callout />

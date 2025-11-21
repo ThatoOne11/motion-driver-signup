@@ -4,14 +4,13 @@ import {
   signal,
   OnInit,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Field } from '@angular/forms/signals';
 import { AuthService } from '@core/services/auth/auth.service';
 import { inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MfaAuthService } from '@core/services/auth/auth.mfa.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AccountFormGroupBuilder } from '@account/models/form-groups/account-form-group-builder';
 import { MatButtonModule } from '@angular/material/button';
 import {
   AccountRoutePaths,
@@ -21,12 +20,18 @@ import {
 import { RoutesService } from '@core/services/routes.service';
 import { environment } from '@environments/environment';
 import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
+import {
+  LoginFormModel,
+  RegisterFormModel,
+  createLoginForm,
+  createRegisterForm,
+} from '@account/models/forms/auth-forms.config';
 
 @Component({
   selector: 'app-account-access',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
+    Field,
     MatIconModule,
     MatInputModule,
     MatButtonModule,
@@ -38,27 +43,31 @@ import { MotionBackgroundComponent } from '@shared-components/motion-background/
   styleUrl: './auth.flow.component.scss',
 })
 export class AccountAccessComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
   private mfaAuthService = inject(MfaAuthService);
   private router = inject(Router);
   private routesService = inject(RoutesService);
   private route = inject(ActivatedRoute);
-  protected accountFormGroupBuilder: AccountFormGroupBuilder;
-  protected loginFormGroup: FormGroup;
-  protected registerFormGroup: FormGroup;
+
+  private readonly loginModel = signal<LoginFormModel>({
+    email: '',
+    password: '',
+  });
+  private readonly registerModel = signal<RegisterFormModel>({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+  });
+
+  protected readonly loginForm = createLoginForm(this.loginModel);
+  protected readonly registerForm = createRegisterForm(this.registerModel);
   protected readonly termsRoute = InformationRoutePaths.TERMS_OF_SERVICE;
   protected readonly privacyRoute = InformationRoutePaths.PRIVACY_POLICY;
   protected readonly moreInformationRoute =
     InformationRoutePaths.MORE_INFORMATION;
 
-  constructor() {
-    this.accountFormGroupBuilder = new AccountFormGroupBuilder(
-      this.formBuilder,
-    );
-    this.loginFormGroup = this.accountFormGroupBuilder.buildLoginForm();
-    this.registerFormGroup = this.accountFormGroupBuilder.buildRegisterForm();
-  }
+  constructor() {}
   async ngOnInit(): Promise<void> {
     this.authService.getAuthenticatedUser().then((user) => {
       if (user) this.router.navigate([this.routesService.getLandingPage()]);
@@ -72,9 +81,11 @@ export class AccountAccessComponent implements OnInit {
   registerMessage = signal('');
   registerError = signal(false);
   authMode = signal<'login' | 'register'>('login');
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
+  togglePasswordVisibility(event: MouseEvent, input: HTMLInputElement) {
     event.stopPropagation();
+    const next = !this.hide();
+    this.hide.set(next);
+    input.type = next ? 'password' : 'text';
   }
 
   switchMode(mode: 'login' | 'register') {
@@ -102,8 +113,8 @@ export class AccountAccessComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.loginFormGroup.invalid) return;
-    const { email, password } = this.loginFormGroup.value;
+    if (this.loginForm().invalid()) return;
+    const { email, password } = this.loginModel();
 
     const { error } = await this.authService.loginWithSupabaseClient(
       email,
@@ -132,7 +143,7 @@ export class AccountAccessComponent implements OnInit {
   }
 
   requestPasswordReset() {
-    const { email } = this.loginFormGroup.value;
+    const { email } = this.loginModel();
     if (!email) {
       this.resetPasswordMessage.set(
         'Email is required to request a password reset.',
@@ -160,10 +171,10 @@ export class AccountAccessComponent implements OnInit {
   async register() {
     this.registerMessage.set('');
     this.registerError.set(false);
-    if (this.registerFormGroup.invalid) {
+    if (this.registerForm().invalid()) {
       return;
     }
-    const { firstName, lastName, phone, email } = this.registerFormGroup.value;
+    const { firstName, lastName, phone, email } = this.registerModel();
 
     try {
       await this.authService.registerDriver(email, firstName, lastName, phone);
@@ -175,5 +186,12 @@ export class AccountAccessComponent implements OnInit {
       );
       this.registerError.set(true);
     }
+  }
+
+  protected hasError(
+    errors: readonly { kind?: string }[] | undefined,
+    kind: string,
+  ): boolean {
+    return !!errors?.some((error) => error.kind === kind);
   }
 }

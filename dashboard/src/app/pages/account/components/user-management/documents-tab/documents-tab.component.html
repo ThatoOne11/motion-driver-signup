@@ -1,0 +1,94 @@
+<section class="form-card document-card">
+  @if (licenceDisc(); as ld) {
+    <h4 class="card-title">LICENCE DISC</h4>
+    <dl class="profile-details">
+      <div class="detail-item">
+        <dt>Bike Make:</dt>
+        <dd>{{ ld.bikeMake }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Expiry Date:</dt>
+        <dd>{{ ld.expiryDate }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Licence No.:</dt>
+        <dd>{{ ld.licenceNo }}</dd>
+      </div>
+    </dl>
+  } @else {
+    <div>Loading Licence Disc...</div>
+  }
+</section>
+
+<section class="form-card document-card">
+  @if (driversLicence(); as dl) {
+    <h4 class="card-title">DRIVER'S LICENCE</h4>
+    <dl class="profile-details">
+      <div class="detail-item">
+        <dt>Name:</dt>
+        <dd>{{ dl.name }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Codes:</dt>
+        <dd>{{ dl.codes }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Valid To:</dt>
+        <dd>{{ dl.validTo }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>ID No.:</dt>
+        <dd>{{ dl.idNo }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Valid From:</dt>
+        <dd>{{ dl.validFrom }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>First Issue Date:</dt>
+        <dd>{{ dl.firstIssueDate }}</dd>
+      </div>
+    </dl>
+  } @else {
+    <div>Loading Driver's Licence...</div>
+  }
+</section>
+
+<section class="form-card document-card">
+  @if (idProof(); as id) {
+    <h4 class="card-title">ID PROOF</h4>
+    <dl class="profile-details">
+      <div class="detail-item">
+        <dt>Full Name:</dt>
+        <dd>{{ id.fullName }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>ID No.:</dt>
+        <dd>{{ id.idNo }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Nationality:</dt>
+        <dd>{{ id.nationality }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Date of Birth:</dt>
+        <dd>{{ id.dateOfBirth }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Date of Issue:</dt>
+        <dd>{{ id.dateOfIssue }}</dd>
+      </div>
+    </dl>
+  } @else {
+    <div>Loading ID Proof...</div>
+  }
+</section>
+
+<section class="form-card document-card">
+  <h4 class="card-title">TOP BOX PHOTO</h4>
+  @if (topBoxPhotoUrl(); as src) {
+    <img [ngSrc]="src" width="600" height="400" />
+  } @else {
+    <div>Loading Photo...</div>
+  }
+</section>

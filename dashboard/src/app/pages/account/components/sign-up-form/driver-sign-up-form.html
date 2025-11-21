@@ -1,113 +1,111 @@
 <div class="auth-page">
-  <div class="top-actions">
-    <button mat-stroked-button color="primary" (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Logout
-    </button>
-  </div>
-  <h1 class="title">Complete your driver profile</h1>
-  <p class="subtitle">Tell us a bit about your driving</p>
+  <app-motion-background></app-motion-background>
 
-  <form [formGroup]="form" class="auth-form register-form">
-    <div class="error-box" *ngIf="submitError as err">{{ err }}</div>
+  <div class="header">
+    <div class="logos">
+      <img src="assets/icons/logo.svg" alt="MotionAds" />
+      <mat-icon [routerLink]="moreInformationRoute">info</mat-icon>
+    </div>
+    <h1>Tell Us More About</h1>
+    <h2>Your Driving</h2>
+
+    <p>
+      Please upload your documents to help your sign up process, but isnt
+      required for registration
+    </p>
+    <div class="step-indicator">Step 1 of 2</div>
+  </div>
+
+  <app-driver-progress
+    [percent]="progressState().percent"
+    [message]="progressState().message"
+  ></app-driver-progress>
+
+  <form class="auth-form register-form" (submit)="saveAndContinue($event)">
+    @if (submitError(); as err) {
+      <div class="error-box">{{ err }}</div>
+    }
     <!-- Province first -->
     <mat-form-field appearance="outline" class="field">
       <mat-label>Province</mat-label>
-      <mat-select formControlName="province" required [disabled]="isSubmitting">
-        <mat-option *ngFor="let p of provinces()" [value]="p.id">
-          {{ p.name }}
-        </mat-option>
+      <mat-select [field]="driverForm.province">
+        @for (p of provinces(); track p.id) {
+          <mat-option [value]="p.id">
+            {{ p.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <!-- City (disabled until province selected) -->
     <mat-form-field appearance="outline" class="field">
       <mat-label>City</mat-label>
-      <mat-select formControlName="city" required [disabled]="isSubmitting">
-        <mat-option *ngFor="let c of cities()" [value]="c.id">{{
-          c.name
-        }}</mat-option>
+      <mat-select [field]="driverForm.city">
+        @for (c of cities(); track c.id) {
+          <mat-option [value]="c.id">
+            {{ c.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <!-- Suburb (switches to input when Province=Other and City=Other) -->
-    <ng-container *ngIf="!isFreeTextSuburb(); else suburbTextField">
+    @if (!isFreeTextSuburb()) {
       <mat-form-field appearance="outline" class="field">
         <mat-label>Suburb</mat-label>
-        <mat-select formControlName="suburb" required [disabled]="isSubmitting">
-          <mat-option *ngFor="let s of suburbs()" [value]="s.id">{{
-            s.name
-          }}</mat-option>
+        <mat-select [field]="driverForm.suburb">
+          @for (s of suburbs(); track s.id) {
+            <mat-option [value]="s.id">
+              {{ s.name }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
-    </ng-container>
-    <ng-template #suburbTextField>
+    } @else {
       <mat-form-field appearance="outline" class="field">
         <mat-label>Suburb</mat-label>
         <input
           matInput
-          formControlName="suburb"
-          [disabled]="isSubmitting"
+          [field]="driverForm.suburb"
           placeholder="Type your suburb"
-          required
+          type="text"
         />
       </mat-form-field>
-    </ng-template>
+    }
 
     <!-- Platforms -->
     <mat-form-field appearance="outline" class="field">
       <mat-label>Which companies do you drive for?</mat-label>
-      <mat-select
-        formControlName="platforms"
-        multiple
-        required
-        [disabled]="isSubmitting"
-      >
-        <mat-option *ngFor="let p of platforms()" [value]="p.id">
-          {{ p.name }}
-        </mat-option>
+      <mat-select [field]="driverForm.platforms" multiple>
+        @for (p of platforms(); track p.id) {
+          <mat-option [value]="p.id">
+            {{ p.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <!-- Bike ownership -->
     <mat-form-field appearance="outline" class="field">
       <mat-label>Bike ownership</mat-label>
-      <mat-select
-        formControlName="bikeOwnership"
-        required
-        [disabled]="isSubmitting"
-      >
-        <mat-option *ngFor="let b of bikeOwnershipTypes()" [value]="b.id">
-          {{ b.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Days per week -->
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Days per week delivering</mat-label>
-      <mat-select
-        formControlName="daysPerWeek"
-        required
-        [disabled]="isSubmitting"
-      >
-        <mat-option *ngFor="let d of daysPerWeek()" [value]="d.value">
-          {{ d.value }}
-        </mat-option>
+      <mat-select [field]="driverForm.bikeOwnership">
+        @for (b of bikeOwnershipTypes(); track b.id) {
+          <mat-option [value]="b.id">
+            {{ b.name }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <!-- Years driving -->
     <mat-form-field appearance="outline" class="field">
       <mat-label>Years driving</mat-label>
-      <mat-select
-        formControlName="yearsDriving"
-        required
-        [disabled]="isSubmitting"
-      >
-        <mat-option *ngFor="let y of yearsDrivingOptions()" [value]="y.id">
-          {{ y.label }}
-        </mat-option>
+      <mat-select [field]="driverForm.yearsDriving">
+        @for (y of yearsDrivingOptions(); track y.id) {
+          <mat-option [value]="y.id">
+            {{ y.label }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -115,17 +113,21 @@
       mat-flat-button
       color="primary"
       class="submit"
-      type="button"
-      [disabled]="form.invalid || isSubmitting"
-      (click)="saveAndContinue()"
+      type="submit"
+      [disabled]="!driverForm().valid() || driverForm().submitting()"
     >
-      <ng-container *ngIf="!isSubmitting; else loadingTpl"
-        >Save & Continue</ng-container
-      >
-      <ng-template #loadingTpl>
+      @if (!driverForm().submitting()) {
+        Save & Continue
+      } @else {
         <span class="spinner"></span>
         Saving...
-      </ng-template>
+      }
     </button>
   </form>
+
+  <div class="bottom-logout">
+    <button type="button" class="logout-pill" (click)="logout()">
+      LOG OUT
+    </button>
+  </div>
 </div>

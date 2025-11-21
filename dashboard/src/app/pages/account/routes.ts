@@ -7,7 +7,7 @@ import { Unauthorized } from './components/unauthorized/unauthorized';
 import { AccountRouteSubPaths } from '@core/constants/routes.constants';
 import { EmailPassthrough } from './components/email-passthrough/email-passthrough';
 import { UserManagementComponent } from './components/user-management/user-management.component';
-import { DriverSignUpForm } from './components/sign-up-form/sign-up-form';
+import { DriverSignUpForm } from './components/sign-up-form/driver-sign-up-form';
 import { DocumentsUploadComponent } from './components/documents-upload/documents-upload';
 
 export const ACCOUNT_ROUTES_WITH_NO_GUARD: Routes = [

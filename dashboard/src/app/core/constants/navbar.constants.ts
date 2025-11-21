@@ -4,4 +4,5 @@ import { RoutePaths } from './routes.constants';
 export const NAVBAR_HIDDEN_ROUTES: string[] = [
   `/${RoutePaths.INSPECTOR}`,
   `/${RoutePaths.INFORMATION}`,
+  `/${RoutePaths.ACCOUNT}`,
 ];

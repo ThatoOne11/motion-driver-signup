@@ -3,17 +3,12 @@ import {
   getTwilioConfig,
   getAppConfig,
   getSupabaseConfig,
+  getEnvBool,
 } from "../../_shared/config.ts";
+import { normalizePhoneNumber } from "../helper-functions/normalize-phone.ts";
 // ---------- Helpers
 function toPhoneToE164(raw: string, cc: string): string {
-  const trimmed = raw.replace(/\s|-/g, "");
-  const ccClean = (cc || "").replace(/^\+/, "");
-  if (trimmed.startsWith("+")) return trimmed;
-  if (trimmed.startsWith("00")) return `+${trimmed.slice(2)}`;
-  if (ccClean && trimmed.startsWith("0"))
-    return `+${ccClean}${trimmed.slice(1)}`;
-  if (ccClean && !trimmed.startsWith("0")) return `+${ccClean}${trimmed}`;
-  return trimmed;
+  return normalizePhoneNumber(raw, cc);
 }
 function ensureWhatsappPrefix(v: string) {
   return v.startsWith("whatsapp:") ? v : `whatsapp:${v}`;
@@ -148,9 +143,7 @@ export async function sendVerificationWhatsAppAndSms(args: {
   //    If WhatsApp is accepted (SID returned) but later undelivered, the
   //    twillio-callback function will send the SMS using this stored row.
   //    In local development DRY_RUN mode, only record the fallback row and do not send anything.
-  const DRY_RUN =
-    Deno.env.get("TWILIO_DRY_RUN") === "1" ||
-    Deno.env.get("LOCAL_NO_TWILIO") === "1";
+  const DRY_RUN = getEnvBool("TWILIO_DRY_RUN") || getEnvBool("LOCAL_NO_TWILIO");
   if (DRY_RUN) {
     const drySid = `dryrun-${crypto.randomUUID()}`;
     try {
@@ -221,9 +214,7 @@ export async function sendInviteWhatsAppAndFallback(args: {
 
 // Compatibility export for twillio-callback which imports sendSms(to, body)
 export async function sendSms(toPhone: string, body: string): Promise<void> {
-  const DRY_RUN =
-    Deno.env.get("TWILIO_DRY_RUN") === "1" ||
-    Deno.env.get("LOCAL_NO_TWILIO") === "1";
+  const DRY_RUN = getEnvBool("TWILIO_DRY_RUN") || getEnvBool("LOCAL_NO_TWILIO");
   if (DRY_RUN) {
     console.log("[twilio.service] DRY_RUN: skipped sendSms", { to: toPhone });
     return;

@@ -42,7 +42,7 @@ export const routes: Routes = [
   {
     path: RoutePaths.INSPECTOR,
     loadComponent: () =>
-      import('./pages/inspector/inspector.component').then(
+      import('./pages/inspector/components/inspector/inspector.component').then(
         (m) => m.InspectorComponent,
       ),
     canActivate: [authAndMfaGuard],

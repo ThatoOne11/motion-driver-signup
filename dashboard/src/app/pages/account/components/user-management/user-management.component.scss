@@ -1,54 +1,134 @@
-.page {
-  display: flex;
-  justify-content: center;
+@use "sass:map";
+@use "@theme/theme-colors.scss" as theme;
+@use "@styles/page-layout.scss" as page-layout;
+@use "@styles/variables.scss" as v;
+
+// Local variables for this component
+$nav-height: 80px;
+$page-padding-local: 24px;
+
+:host {
+  @include page-layout.hero-section;
+  @include page-layout.form-card;
+
+  // This overrides the hidden icon from the mixin
+  .hero .info-icon {
+    display: block;
+  }
 }
 
-.content {
+.profile-page {
+  @include page-layout.page-container;
+}
+
+//Content Blocks Width Constraint
+.profile-details-card,
+.reset-button,
+.action-button,
+.profile-nav,
+.support-section,
+.document-tab {
+  width: clamp(v.$form-card-min-width, 90vw, v.$form-card-max-width);
+}
+
+//Byline text below hero
+.form-byline {
+  margin: 0px;
+  text-align: center;
+  color: var(--mat-sys-primary);
+  font-size: 20px;
+  margin-top: -28px;
+}
+
+.profile-details-card {
+  padding: 0px 20px 0px 20px !important;
+}
+
+//Action Buttons
+.action-button.mat-mdc-unelevated-button,
+.reset-button.mat-mdc-unelevated-button {
+  height: 50px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+}
+
+.reset-button.mat-mdc-unelevated-button {
+  margin-bottom: 0px;
+  width: 285px;
+}
+
+.btn-support.mat-mdc-unelevated-button {
+  background-color: var(--mat-sys-secondary);
+  width: 220px;
+}
+
+.btn-logout.mat-mdc-unelevated-button {
+  background-color: map.get(theme.$error-palette, 60);
+  width: 165px;
+}
+
+//In-Page Navigation
+.profile-nav {
+  background-color: map.get(theme.$primary-palette, 20);
+  border-radius: 20px;
+  height: $nav-height;
+
+  ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .nav-item {
+    a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgba(map.get(theme.$primary-palette, 100), 0.7);
+      font-size: 0.75rem;
+
+      mat-icon {
+        font-size: 1.8rem;
+        width: 66px;
+        height: 36px;
+        border-radius: 8px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    &.active {
+      a {
+        color: map.get(theme.$primary-palette, 100);
+        mat-icon {
+          color: map.get(theme.$primary-palette, 20);
+          background-color: map.get(theme.$primary-palette, 100);
+        }
+      }
+    }
+  }
+}
+
+//Support Section
+.support-section {
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-content: center;
-  max-width: 353px;
-  gap: 24px;
-}
 
-.profile-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-
-  .avatar mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    color: var(--mat-sys-primary);
+  .support-text {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: var(--mat-sys-secondary);
+    line-height: 1.5;
+    margin-top: 0px;
   }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .name {
-    font-weight: 350;
-    font-size: 20px;
-  }
-
-  .email {
-    color: #666;
-    font-size: 14px;
-  }
-}
-
-.logout-button {
-  background-color: var(--mat-sys-primary);
-  color: white;
-  font-weight: 500;
-  width: 100%;
 }

@@ -1,0 +1,43 @@
+<div class="inspector-search">
+  <div class="header">
+    <h1>Driver{{ matchCount === 1 ? "" : "s" }} Found</h1>
+    <p class="count">
+      {{ matchCount }} result{{ matchCount === 1 ? "" : "s" }}
+    </p>
+    <hr class="solid" />
+  </div>
+
+  <mat-radio-group
+    class="matches"
+    [value]="selectedRecordId"
+    (change)="handleSelection($event.value)"
+  >
+    @for (match of matches; track match.recordId) {
+      <label
+        class="match-card"
+        [class.selected]="match.recordId === selectedRecordId"
+      >
+        <mat-radio-button [value]="match.recordId"></mat-radio-button>
+        <div class="card-content">
+          <p class="title">{{ formatTitle(match) }}</p>
+          <p class="value phone">{{ formatPhone(match) }}</p>
+          <p class="value">{{ formatEmail(match) }}</p>
+          <div class="campaign" [class.active]="match.onCampaign">
+            <span class="status">
+              {{ match.onCampaign ? "On a campaign" : "Not on a campaign" }}
+            </span>
+            @if (match.onCampaign && match.campaignName) {
+              <span class="name">{{ match.campaignName }}</span>
+            }
+          </div>
+        </div>
+      </label>
+    } @empty {
+      <p class="empty-state">No matches returned.</p>
+    }
+  </mat-radio-group>
+
+  <div class="bottom-match">
+    <p>Select the driver you want to match.</p>
+  </div>
+</div>

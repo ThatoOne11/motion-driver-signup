@@ -1,0 +1,40 @@
+<div class="progress-wrapper" role="status" aria-live="polite">
+  <div class="progress-label">
+    <span class="percent">{{ clampedPercent() }}%</span>
+    <span class="message">{{ message }}</span>
+  </div>
+
+  <div
+    class="track"
+    [style.--progress]="clampedPercent() + '%'"
+    aria-hidden="true"
+    >
+    <div class="fill" [style.width.%]="clampedPercent()"></div>
+    <div class="bike-holder">
+      <img
+        class="bike"
+        [class.idle]="isIdle()"
+        [class.rev-a]="animationClass() === 'rev-a'"
+        [class.rev-b]="animationClass() === 'rev-b'"
+        src="assets/images/small_bike.png"
+        alt="Progress bike"
+        decoding="async"
+        width="54"
+        height="32"
+        />
+      <div
+        class="confetti-burst"
+        [class.active]="confettiClass() !== ''"
+        [class.burst-a]="confettiClass() === 'burst-a'"
+        [class.burst-b]="confettiClass() === 'burst-b'"
+        >
+        @for (piece of confettiPieces; track piece; let idx = $index) {
+          <span
+            [ngClass]="['particle', 'p' + (idx + 1)]"
+            aria-hidden="true"
+          ></span>
+        }
+      </div>
+    </div>
+  </div>
+</div>

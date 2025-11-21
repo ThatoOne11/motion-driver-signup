@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -7,19 +7,22 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-document-uploader',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, MatTooltipModule],
+  imports: [MatIconModule, MatButtonModule, MatTooltipModule],
   templateUrl: './document-uploader.html',
   styleUrl: './document-uploader.scss',
 })
 export class DocumentUploaderComponent {
   @Input() label = '';
   @Input() accept = 'image/*,.pdf';
+  @Input() showPreview = false;
   @Output() fileSelected = new EventEmitter<File>();
   @Input() canRemove = false;
   @Output() remove = new EventEmitter<void>();
 
   dragging = false;
   fileName: string | null = null;
+  previewUrl: string | null = null;
+  private previewObjectUrl: string | null = null;
 
   async onFileInput(e: Event) {
     const input = e.target as HTMLInputElement;
@@ -27,6 +30,7 @@ export class DocumentUploaderComponent {
     if (file) {
       const processed = await this.maybeConvertHeic(file);
       this.fileName = processed.name;
+       this.setPreview(processed);
       this.fileSelected.emit(processed);
     }
   }
@@ -38,6 +42,7 @@ export class DocumentUploaderComponent {
     if (file) {
       const processed = await this.maybeConvertHeic(file);
       this.fileName = processed.name;
+      this.setPreview(processed);
       this.fileSelected.emit(processed);
     }
   }
@@ -54,6 +59,7 @@ export class DocumentUploaderComponent {
 
   onRemoveClick() {
     this.fileName = null;
+    this.clearPreview();
     this.remove.emit();
   }
 
@@ -116,5 +122,21 @@ export class DocumentUploaderComponent {
       // If conversion fails, return original file; server OCR may fail but upload still works
       return file;
     }
+  }
+
+  private setPreview(file: File) {
+    this.clearPreview();
+    if (!this.showPreview) return;
+    if (!file.type.startsWith('image/')) return;
+    this.previewObjectUrl = URL.createObjectURL(file);
+    this.previewUrl = this.previewObjectUrl;
+  }
+
+  private clearPreview() {
+    if (this.previewObjectUrl) {
+      URL.revokeObjectURL(this.previewObjectUrl);
+      this.previewObjectUrl = null;
+    }
+    this.previewUrl = null;
   }
 }

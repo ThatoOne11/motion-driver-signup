@@ -1,0 +1,52 @@
+@use "sass:map";
+@use "@theme/theme-colors.scss" as theme;
+@use "@styles/page-layout.scss" as page-layout;
+@use "@styles/variables.scss" as v;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.form-card {
+  width: 100%;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+//Document Cards
+.document-card {
+  border: 1px solid var(--mat-sys-secondary);
+  background: v.$surface;
+  padding: 20px 20px 0px 20px;
+
+  .card-title {
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+    text-decoration: underline;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid v.$card-border;
+    font-size: 0.9rem;
+    word-break: break-word;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  img {
+    padding: 20px 0;
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}

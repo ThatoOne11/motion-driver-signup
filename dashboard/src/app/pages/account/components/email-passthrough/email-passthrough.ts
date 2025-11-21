@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +6,7 @@ import { PageTitleComponent } from '@shared-components/page-title/page-title.com
 
 @Component({
   selector: 'app-email-passthrough',
-  imports: [CommonModule, MatIconModule, PageTitleComponent],
+  imports: [MatIconModule, PageTitleComponent],
   templateUrl: './email-passthrough.html',
   styleUrl: './email-passthrough.scss',
 })

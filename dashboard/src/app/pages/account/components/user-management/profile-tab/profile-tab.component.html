@@ -1,0 +1,50 @@
+@if (profile(); as p) {
+  <dl class="profile-details">
+    <div class="detail-item">
+      <dt>First Name:</dt>
+      <dd>{{ p.firstName }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Last Name:</dt>
+      <dd>{{ p.lastName }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Phone Number:</dt>
+      <dd>{{ p.phoneNumber }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Email:</dt>
+      <dd>{{ p.email }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Motion ID:</dt>
+      <dd>{{ p.motionId }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Province:</dt>
+      <dd>{{ p.province }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>City:</dt>
+      <dd>{{ p.city }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Suburb:</dt>
+      <dd>{{ p.suburb }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Platforms:</dt>
+      <dd>{{ p.platforms }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Bike Ownership:</dt>
+      <dd>{{ p.bikeOwnership }}</dd>
+    </div>
+    <div class="detail-item">
+      <dt>Years Driving:</dt>
+      <dd>{{ p.yearsDriving }}</dd>
+    </div>
+  </dl>
+} @else {
+  <div>Loading Profile...</div>
+}

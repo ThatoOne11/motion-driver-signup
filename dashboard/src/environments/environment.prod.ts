@@ -5,5 +5,4 @@ export const environment = {
   turnstileKey: '',
   enforceEmailPassthrough: false,
   enforceMfa: false,
-  registerDriverUrl: '',
 };

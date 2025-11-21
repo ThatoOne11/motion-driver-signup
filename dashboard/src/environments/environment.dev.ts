@@ -6,5 +6,4 @@ export const environment = {
   turnstileKey: '',
   enforceEmailPassthrough: false,
   enforceMfa: false,
-  registerDriverUrl: 'http://127.0.0.1:54321/functions/v1/register-driver',
 };

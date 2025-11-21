@@ -1,0 +1,132 @@
+<div class="inspector-page">
+  <app-motion-background></app-motion-background>
+
+  <div class="hero">
+    <mat-icon class="logo" svgIcon="logo"></mat-icon>
+    <h1 class="welcome">
+      <span class="line-1">Sign Up</span>
+      <span class="line-2">Existing Drivers</span>
+    </h1>
+  </div>
+
+  <p class="form-byline">
+    This sign-up form is for MotionAds inspectors to add existing drivers from
+    AirTable.
+  </p>
+  <p class="form-byline-subtext">
+    Please make sure the driver’s details are correct before submitting.
+  </p>
+
+  <div class="search-row">
+    <form
+      class="form-card auth-form search-form"
+      (submit)="searchDriver(); $event.preventDefault()"
+    >
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Please select an Identifier</mat-label>
+        <mat-select
+          [field]="inspectorForm.identifierId"
+          aria-required="true"
+          placeholder="Please select an Identifier"
+        >
+          @if (loadingInspectorOptions()) {
+            <mat-option value="" disabled>Loading options...</mat-option>
+          } @else if (inspectorOptions().length === 0) {
+            <mat-option value="" disabled>No identifiers available</mat-option>
+          } @else {
+            <mat-option value="" disabled>Select an identifier</mat-option>
+            @for (option of inspectorOptions(); track option.id) {
+              <mat-option [value]="option.id">{{ option.name }}</mat-option>
+            }
+          }
+        </mat-select>
+        @if (
+          inspectorForm.identifierId().touched() &&
+          hasError(inspectorForm.identifierId().errors(), "required")
+        ) {
+          <mat-error>Please select an identifier</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          [field]="inspectorForm.searchTerm"
+          placeholder="Search..."
+          aria-required="true"
+          autocomplete="off"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+        @if (
+          inspectorForm.searchTerm().touched() &&
+          hasError(inspectorForm.searchTerm().errors(), "required")
+        ) {
+          <mat-error>Search term is required</mat-error>
+        }
+      </mat-form-field>
+
+      @if (searchError()) {
+        <div class="search-error">{{ searchError() }}</div>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        class="submit"
+        type="submit"
+        [disabled]="inspectorForm().invalid() || searching()"
+      >
+        SEARCH
+      </button>
+    </form>
+
+    @if (searching() || matchCount() > 0) {
+      <div class="results-wrapper">
+        @if (searching()) {
+          <div class="search-loading">
+            <mat-progress-spinner
+              diameter="32"
+              mode="indeterminate"
+            ></mat-progress-spinner>
+            <span>Searching for drivers...</span>
+          </div>
+        } @else if (matchCount() > 0) {
+          <div class="matches-card form-card">
+            <app-inspector-search
+              [matches]="matches()"
+              [matchCount]="matchCount()"
+              [selectedRecordId]="selectedRecordId()"
+              (matchSelected)="onMatchSelected($event)"
+            ></app-inspector-search>
+            <div class="register-actions">
+              @if (registerError()) {
+                <div class="register-error">{{ registerError() }}</div>
+              }
+              @if (registerSuccess()) {
+                <div class="register-success">{{ registerSuccess() }}</div>
+              }
+              <button
+                mat-flat-button
+                color="primary"
+                class="register-button"
+                (click)="registerSelectedDriver()"
+                [disabled]="registeringDriver() || !selectedRecordId()"
+              >
+                @if (registeringDriver()) {
+                  Registering...
+                } @else {
+                  Register Selected Driver
+                }
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button mat-flat-button class="logout-button" (click)="signOut()">
+    Log Out
+  </button>
+</div>

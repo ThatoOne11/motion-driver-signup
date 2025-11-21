@@ -1,0 +1,32 @@
+<section class="form-card profile-details-card">
+  @if (bankingDetails(); as bank) {
+    <dl class="profile-details">
+      <div class="detail-item">
+        <dt>Bank:</dt>
+        <dd>{{ bank.bank }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Account Holder:</dt>
+        <dd>{{ bank.accountHolder }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Payment Reference:</dt>
+        <dd>{{ bank.paymentReference }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Branch Code:</dt>
+        <dd>{{ bank.branchCode }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Account Number:</dt>
+        <dd>{{ bank.accountNumber }}</dd>
+      </div>
+      <div class="detail-item">
+        <dt>Account Type:</dt>
+        <dd>{{ bank.accountType }}</dd>
+      </div>
+    </dl>
+  } @else {
+    <div>Loading Banking Details...</div>
+  }
+</section>

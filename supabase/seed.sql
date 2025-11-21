@@ -199,3 +199,10 @@ select
 from
   cities_map cm
   join public.cities c on c.name = cm.cities_name on conflict (name) do nothing;
+
+insert into
+  public.inspector_options (name)
+values
+  ('Name'),
+  ('Email Address'),
+  ('Motion ID') on conflict (name) do nothing;

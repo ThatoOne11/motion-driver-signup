@@ -1,16 +1,105 @@
+:root {
+  --mobile-px: clamp(12px, 4vw, 32px);
+}
+
 .auth-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 24px 16px 64px;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: clamp(24px, 8vw, 48px) clamp(12px, 4vw, 32px);
+  gap: clamp(16px, 4vw, 32px);
+  position: relative;
+}
+
+app-driver-progress {
+  width: 75%;
+}
+
+.logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+
+  img {
+    width: clamp(8rem, 18vw, 12rem);
+    height: auto;
+    margin: 0 auto;
+    display: block;
+  }
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+    position: absolute;
+    right: clamp(0.5rem, 4vw, 2rem);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(22px, 4vw, 32px);
+    cursor: pointer;
+    overflow: visible;
+    fill: 0;
+  }
+}
+
+.header {
+  width: min(560px, 100%);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2px, 1vw, 5px);
+
+  h1 {
+    font-weight: 500;
+    color: var(--mat-sys-neutral10);
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  h2 {
+    font-weight: 500;
+    color: var(--mat-sys-primary);
+    font-size: clamp(1.25rem, 4.2vw, 2rem);
+    margin-top: clamp(4px, 1.5vw, 10px);
+  }
+
+  p {
+    font-weight: 250;
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    max-width: clamp(70vw, 36rem, 50vw);
+    color: var(--mat-sys-primary);
+  }
+
+  .step-indicator {
+    display: inline-block;
+    background-color: var(--mat-sys-secondary);
+    color: white;
+    font-weight: 400;
+    text-align: center;
+    width: clamp(220px, 75vw, 520px);
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    padding: clamp(8px, 3vw, 12px) clamp(14px, 6vw, 28px);
+    border-radius: clamp(6px, 2vw, 10px);
+    margin-top: clamp(10px, 3vw, 18px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+app-motion-background {
+  position: absolute;
+  z-index: -1;
 }
 
 .top-actions {
-  width: 100%;
-  max-width: 520px;
+  width: min(560px, 100%);
   display: flex;
   justify-content: flex-end;
+  margin: 0 auto;
+  padding-right: clamp(0px, 2vw, 12px);
 }
 
 .title {
@@ -31,26 +120,58 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  width: min(520px, 100%);
+  gap: clamp(12px, 3vw, 20px);
+  width: min(540px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(4px, 2vw, 16px);
+  box-sizing: border-box;
 }
 
 .register-form {
-  padding: 24px;
+  padding: clamp(20px, 5vw, 32px);
   background: #fff;
-  border-radius: 16px;
+  border-radius: clamp(12px, 4vw, 16px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--mat-sys-secondary);
+}
+
+.bottom-logout {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: clamp(20px, 6vw, 40px);
+}
+
+.logout-pill {
+  background: var(--close-button-color, #e16341);
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  padding: clamp(10px, 3.5vw, 14px) clamp(24px, 8vw, 38px);
+  font-size: clamp(12px, 3.2vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  text-transform: uppercase;
+}
+
+.logout-pill:hover,
+.logout-pill:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(225, 99, 65, 0.35);
 }
 
 .error-box {
-  margin-bottom: 8px;
-  padding: 10px 12px;
+  margin-bottom: clamp(6px, 2vw, 10px);
+  padding: clamp(8px, 2.5vw, 12px);
   border: 1px solid rgba(244, 67, 54, 0.35);
   background: rgba(244, 67, 54, 0.08);
-  color: #b00020;
+  color: var(--mat-sys-error);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: clamp(12px, 3.4vw, 14px);
 }
 
 .field {
@@ -58,10 +179,11 @@
 }
 
 .submit {
-  height: 48px;
+  height: clamp(46px, 12vw, 52px);
   border-radius: 999px;
   font-weight: 600;
   text-transform: none;
+  font-size: clamp(14px, 3.8vw, 16px);
 }
 
 .submit .spinner {

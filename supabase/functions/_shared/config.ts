@@ -13,6 +13,18 @@ export function getEnv(
   return v;
 }
 
+export function getEnvBool(
+  name: string,
+  defaultValue = false
+): boolean {
+  const raw = getEnv(name);
+  if (raw == null) return defaultValue;
+  const normalized = raw.trim().toLowerCase();
+  if (["true", "1", "yes", "y", "on"].includes(normalized)) return true;
+  if (["false", "0", "no", "n", "off"].includes(normalized)) return false;
+  return defaultValue;
+}
+
 export function getSupabaseConfig() {
   const SUPABASE_URL = getEnvOrThrow("SUPABASE_URL");
   const SERVICE_ROLE_KEY = getEnvOrThrow("SUPABASE_SERVICE_ROLE_KEY");
@@ -49,8 +61,8 @@ export function getTwilioConfig() {
   const TWILIO_STATUS_CALLBACK_URL = getEnv("TWILIO_STATUS_CALLBACK_URL");
   const TWILIO_MESSAGING_SERVICE_SID = getEnv("TWILIO_MESSAGING_SERVICE_SID");
   const TWILIO_SMS_FROM = getEnv("TWILIO_SMS_FROM");
-  const LOG_WHATSAPP = getEnv("LOG_WHATSAPP") === "1";
-  const TWILIO_DRY_RUN = getEnv("TWILIO_DRY_RUN") === "1";
+  const LOG_WHATSAPP = getEnvBool("LOG_WHATSAPP");
+  const TWILIO_DRY_RUN = getEnvBool("TWILIO_DRY_RUN");
   return {
     TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN,

@@ -6,6 +6,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { ResponseStatuses } from "../_shared/models.ts";
+import { getEnvBool } from "../_shared/config.ts";
 import {
   normalizeEmail,
   normalizePhoneZA,
@@ -59,7 +60,7 @@ function escapeAirtableString(v: string) {
 
 Deno.serve(async (req) => {
   const reqId = crypto.randomUUID();
-  const LOG = (Deno.env.get("LOG_AIRTABLE_CHECK") ?? "1") === "1";
+  const LOG = getEnvBool("LOG_AIRTABLE_CHECK", true);
   const log = (...args: any[]) => {
     if (LOG) console.log("[airtable-check]", reqId, ...args);
   };
@@ -116,7 +117,7 @@ Deno.serve(async (req) => {
     }
 
     // Optional local/testing bypass using bypass.json when AIRTABLE_BYPASS=1
-    const bypassEnabled = (Deno.env.get("AIRTABLE_BYPASS") ?? "0") === "1";
+    const bypassEnabled = getEnvBool("AIRTABLE_BYPASS");
     if (bypassEnabled) {
       try {
         const json = (

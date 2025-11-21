@@ -4,7 +4,7 @@ import { registerCustomSvgIcons } from '@core/utils/register-svg-icons';
 import { Navbar } from '@core/components/navbar/navbar';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
+
 import { LoaderComponent } from '@core/components/loader/loader';
 import { ToastComponent } from '@core/components/toast/toast';
 import { filter } from 'rxjs';
@@ -16,10 +16,9 @@ import { NAVBAR_HIDDEN_ROUTES } from '@core/constants/navbar.constants';
     RouterOutlet,
     Navbar,
     MatIconModule,
-    CommonModule,
     LoaderComponent,
-    ToastComponent,
-  ],
+    ToastComponent
+],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
   standalone: true,

@@ -4,7 +4,9 @@ import { FunctionResponseType } from "../../_shared/models.ts";
 export async function existingUser(
   adminClient: SupabaseClient,
   email: string,
-  phone: string
+  phone: string,
+  rawPhone?: string,
+  countryCode?: string
 ): Promise<FunctionResponseType> {
   {
     const { data: existingEmail, error: emailLookupError } = await adminClient
@@ -27,10 +29,39 @@ export async function existingUser(
       };
     }
 
-    const { data: existingPhone, error: phoneLookupError } = await adminClient
-      .from("users")
-      .select("id")
-      .eq("phone_number", phone)
+    const variants = new Set<string>();
+    const addVariant = (v?: string | null) => {
+      if (v && v.length > 0) variants.add(v);
+    };
+
+    addVariant(phone);
+    addVariant(rawPhone);
+
+    const digitsFromNormalized = (phone ?? "").replace(/\D/g, "");
+    const digitsFromRaw = (rawPhone ?? "").replace(/\D/g, "");
+    addVariant(digitsFromNormalized);
+    addVariant(digitsFromRaw);
+
+    // Add a local-format variant (0XXXXXXXXX) when we can derive it from the country code
+    const ccClean = (countryCode ?? "").replace(/^\+/, "");
+    if (ccClean && digitsFromNormalized.startsWith(ccClean)) {
+      const local = digitsFromNormalized.slice(ccClean.length);
+      if (local.length > 0) {
+        addVariant(`0${local}`);
+        addVariant(local);
+      }
+    }
+
+    const phoneValues = Array.from(variants);
+    const phoneQuery = adminClient.from("users").select("id");
+    if (phoneValues.length === 1) {
+      phoneQuery.eq("phone_number", phoneValues[0]);
+    } else if (phoneValues.length > 1) {
+      phoneQuery.in("phone_number", phoneValues);
+    }
+
+    const { data: existingPhone, error: phoneLookupError } = await phoneQuery
+      .limit(1)
       .maybeSingle();
     if (phoneLookupError) {
       return {

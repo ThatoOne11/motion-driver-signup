@@ -1,72 +1,102 @@
 <div class="auth-page">
-  <h1 class="title">Upload Your Documents</h1>
-  <p class="subtitle">
-    Please upload the following documents in JPEG, PNG or PDF format.
-  </p>
+  <app-motion-background></app-motion-background>
+  <div class="header">
+    <div class="logos">
+      <img src="assets/icons/logo.svg" alt="MotionAds" />
+      <mat-icon [routerLink]="moreInformationRoute">info</mat-icon>
+    </div>
+    <h1>Tell Us More About</h1>
+    <h2>Your Driving</h2>
 
-  <div class="error" *ngIf="errorMsg">{{ errorMsg }}</div>
-  <div class="success" *ngIf="successMsg">{{ successMsg }}</div>
-
-  <form [formGroup]="form" class="doc-grid">
-    <app-document-uploader
-      label="Please upload a copy of your driver’s licence."
-      accept="image/*,.pdf"
-      [canRemove]="!!form.value.driversLicence"
-      (fileSelected)="onFileSelected('driversLicence', $event)"
-      (remove)="onRemove('driversLicence')"
-    ></app-document-uploader>
-
-    <app-document-uploader
-      label="Please upload a copy of your licence disc."
-      accept="image/*,.pdf"
-      [canRemove]="!!form.value.licenceDisc"
-      (fileSelected)="onFileSelected('licenceDisc', $event)"
-      (remove)="onRemove('licenceDisc')"
-    ></app-document-uploader>
-
-    <app-document-uploader
-      label="Please upload proof of your ID."
-      accept="image/*,.pdf"
-      [canRemove]="!!form.value.idProof"
-      (fileSelected)="onFileSelected('idProof', $event)"
-      (remove)="onRemove('idProof')"
-    ></app-document-uploader>
-
-    <app-document-uploader
-      label="Please upload proof of your banking details."
-      accept="image/*,.pdf"
-      [canRemove]="!!form.value.bankingProof"
-      (fileSelected)="onFileSelected('bankingProof', $event)"
-      (remove)="onRemove('bankingProof')"
-    ></app-document-uploader>
-
-    <app-document-uploader
-      label="Please upload a photograph of your bike’s top box."
-      accept="image/*"
-      [canRemove]="!!form.value.topBoxPhoto"
-      (fileSelected)="onFileSelected('topBoxPhoto', $event)"
-      (remove)="onRemove('topBoxPhoto')"
-    ></app-document-uploader>
-  </form>
-
-  <div class="actions">
-    <button
-      mat-flat-button
-      color="primary"
-      [disabled]="form.invalid || loading"
-      (click)="onContinue()"
-    >
-      <ng-container *ngIf="!loading; else loadingTpl">Continue</ng-container>
-    </button>
-    <ng-template #loadingTpl>
-      <span class="btn-loading">
-        <mat-progress-spinner
-          mode="indeterminate"
-          [diameter]="16"
-          [strokeWidth]="3"
-        ></mat-progress-spinner>
-        <span class="loading-text">Processing…</span>
-      </span>
-    </ng-template>
+    <p>Please enter your details below to complete your driver account</p>
+    <div class="step-indicator">Step 2 of 2</div>
   </div>
+
+  <app-driver-progress
+    [percent]="progressState().percent"
+    [message]="progressState().message"
+  ></app-driver-progress>
+
+  @if (errorMsg) {
+    <div class="error">{{ errorMsg }}</div>
+  }
+  @if (successMsg) {
+    <div class="success">{{ successMsg }}</div>
+  }
+
+  <div class="document-upload">
+    <h2>Please upload the following documents in JPEG, PNG or PDF format</h2>
+    <hr class="solid" />
+    <form [formGroup]="form" class="doc-grid">
+      <app-document-uploader
+        label="Please upload a copy of your driver’s licence."
+        accept="image/*,.pdf"
+        [canRemove]="!!form.value.driversLicence"
+        (fileSelected)="onFileSelected('driversLicence', $event)"
+        (remove)="onRemove('driversLicence')"
+      ></app-document-uploader>
+
+      <app-document-uploader
+        label="Please upload a copy of your licence disc."
+        accept="image/*,.pdf"
+        [canRemove]="!!form.value.licenceDisc"
+        (fileSelected)="onFileSelected('licenceDisc', $event)"
+        (remove)="onRemove('licenceDisc')"
+      ></app-document-uploader>
+
+      <app-document-uploader
+        label="Please upload proof of your ID."
+        accept="image/*,.pdf"
+        [canRemove]="!!form.value.idProof"
+        (fileSelected)="onFileSelected('idProof', $event)"
+        (remove)="onRemove('idProof')"
+      ></app-document-uploader>
+
+      <app-document-uploader
+        label="Please upload proof of your banking details."
+        accept="image/*,.pdf"
+        [canRemove]="!!form.value.bankingProof"
+        (fileSelected)="onFileSelected('bankingProof', $event)"
+        (remove)="onRemove('bankingProof')"
+      ></app-document-uploader>
+
+      <app-document-uploader
+        label="Please upload a photograph of your bike’s top box."
+        accept="image/*"
+        [showPreview]="true"
+        [canRemove]="!!form.value.topBoxPhoto"
+        (fileSelected)="onFileSelected('topBoxPhoto', $event)"
+        (remove)="onRemove('topBoxPhoto')"
+      ></app-document-uploader>
+    </form>
+    <div class="actions">
+      <button
+        mat-flat-button
+        color="primary"
+        class="complete-profile-btn"
+        [disabled]="form.invalid || loading"
+        (click)="onContinue()"
+      >
+        @if (!loading) {
+          COMPLETE DRIVER PROFILE
+        } @else {
+          <span class="btn-loading">
+            <mat-progress-spinner
+              mode="indeterminate"
+              [diameter]="16"
+              [strokeWidth]="3"
+            ></mat-progress-spinner>
+            <span class="loading-text">Processing…</span>
+          </span>
+        }
+      </button>
+    </div>
+  </div>
+
+  <button class="cta secondary" type="button" (click)="onCompleteLater()">
+    Complete Later
+  </button>
+  <app-support-callout></app-support-callout>
+
+  <button class="cta danger" type="button" (click)="onLogout()">Log Out</button>
 </div>

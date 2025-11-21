@@ -12,6 +12,11 @@
   @include page-layout.form-card;
 }
 
+app-motion-background {
+  position: absolute;
+  z-index: -1;
+}
+
 .byline {
   margin: 10px 0 0;
   color: var(--mat-sys-primary);
@@ -101,7 +106,6 @@
   font-weight: 800;
   letter-spacing: 0.4px;
   width: clamp(220px, 50vw, 320px);
-  /* Force secondary color on the actual Mat MDC button host */
   background-color: var(--mat-sys-secondary) !important;
   color: var(--mat-sys-on-secondary) !important;
 }

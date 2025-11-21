@@ -4,24 +4,52 @@
   (drop)="onDrop($event)"
   (dragover)="onDragOver($event)"
   (dragleave)="onDragLeave($event)"
->
-  <div class="label">{{ label }}</div>
-  <div class="dropzone" (click)="$event.preventDefault(); file.click()">
-    <mat-icon>upload</mat-icon>
-    <div class="hint">{{ fileName || "Click to upload." }}</div>
-    <button
-      *ngIf="fileName"
-      mat-icon-button
-      class="remove-icon"
-      (click)="$event.stopPropagation(); onRemoveClick()"
-      aria-label="Remove document"
-      matTooltip="Remove"
+  >
+  <div class="instruction">{{ label }}</div>
+  <div
+    class="dropzone"
+    [class.dropzone--has-file]="!!fileName"
+    (click)="$event.preventDefault(); file.click()"
     >
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-  <div class="actions" *ngIf="fileName">
-    <button type="button" class="link" (click)="onRemoveClick()">Remove</button>
+    @if (!fileName) {
+      <mat-icon class="upload-icon" fontIcon="upload"></mat-icon>
+      <div class="hint">Click to upload.</div>
+    } @else if (showPreview && previewUrl) {
+      <div
+        class="image-preview"
+        [style.background-image]="'url(' + previewUrl + ')'"
+        >
+        <div class="image-preview__top">
+          <span class="image-preview__name">{{ fileName }}</span>
+          <span class="status-pill status-pill--overlay">Uploaded</span>
+          <button
+            mat-icon-button
+            class="trash"
+            (click)="$event.stopPropagation(); onRemoveClick()"
+            aria-label="Remove document"
+            matTooltip="Remove"
+            >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="file-chip">
+        <span class="file-name">{{ fileName }}</span>
+        <div class="file-actions">
+          <span class="status-pill">Uploaded</span>
+          <button
+            mat-icon-button
+            class="trash"
+            (click)="$event.stopPropagation(); onRemoveClick()"
+            aria-label="Remove document"
+            matTooltip="Remove"
+            >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
   </div>
   <input
     #file
@@ -29,5 +57,5 @@
     [accept]="accept"
     (change)="onFileInput($event)"
     hidden
-  />
+    />
 </div>

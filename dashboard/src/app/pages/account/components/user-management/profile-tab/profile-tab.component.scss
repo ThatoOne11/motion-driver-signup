@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "@theme/theme-colors.scss" as theme;
+@use "@styles/variables.scss" as v;
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid v.$card-border;
+  font-size: 0.9rem;
+  word-break: break-word;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}

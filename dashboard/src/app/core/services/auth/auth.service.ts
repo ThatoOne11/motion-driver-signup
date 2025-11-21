@@ -6,7 +6,7 @@ import { AuthConstants } from '@core/constants/auth.constants';
 import { AuthTokenResponsePassword, Session } from '@supabase/supabase-js';
 import { Router } from '@angular/router';
 import { AccountRoutePaths } from '@core/constants/routes.constants';
-import { environment } from '@environments/environment';
+import { SupabaseEdgeFunctions } from '@core/constants/supabase.constants';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -90,6 +90,17 @@ export class AuthService {
     }
   }
 
+  private readonly registerDriverDefaultError =
+    'Registration failed. Please try again.';
+
+  private readonly registerDriverErrorMap = [
+    /edge function returned a non-2xx/i,
+  ];
+
+  private sanitizeFullName(firstName: string, lastName: string): string {
+    return `${firstName} ${lastName}`.replace(/\s+/g, ' ').trim();
+  }
+
   public async registerDriver(
     email: string,
     firstName: string,
@@ -99,43 +110,47 @@ export class AuthService {
   ): Promise<void> {
     const payload = {
       email,
-      fullName: `${firstName} ${lastName}`,
+      fullName: this.sanitizeFullName(firstName, lastName),
       phone,
       password: password ?? this.generateStrongPassword(),
+      inspector: false,
     };
-    const res = await fetch(environment.registerDriverUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${environment.apikey}`,
-        apikey: environment.apikey,
-      },
-      body: JSON.stringify(payload),
-    });
-    let body: any = null;
-    try {
-      body = await res.json();
-    } catch (_) {
-      // fall back to text if not JSON
+
+    const { data, error } =
+      await this.supabase.supabaseClient.functions.invoke<{
+        Message?: string;
+        HasErrors?: boolean;
+        Error?: string;
+        ErrorMessage?: string;
+      }>(SupabaseEdgeFunctions.REGISTER_DRIVER, {
+        body: payload,
+      });
+
+    if (error) {
+      throw new Error(this.mapRegisterError(error.message));
     }
-    if (!res.ok) {
-      const friendly =
-        body?.Message ||
-        body?.Error ||
-        body?.message ||
-        body?.error ||
-        'Registration failed';
-      throw new Error(friendly);
+
+    if (data?.HasErrors) {
+      throw new Error(
+        data?.ErrorMessage ??
+          data?.Error ??
+          data?.Message ??
+          this.registerDriverDefaultError,
+      );
     }
-    if (body?.HasErrors) {
-      const friendly =
-        body?.Error ||
-        body?.Message ||
-        body?.message ||
-        body?.error ||
-        'Registration failed';
-      throw new Error(friendly);
+  }
+
+  private mapRegisterError(rawMessage?: string): string {
+    if (!rawMessage) {
+      return this.registerDriverDefaultError;
     }
+    const friendlyMatch = this.registerDriverErrorMap.some((regex) =>
+      regex.test(rawMessage),
+    );
+    if (friendlyMatch) {
+      return this.registerDriverDefaultError;
+    }
+    return rawMessage;
   }
 
   private generateStrongPassword(length: number = 16): string {

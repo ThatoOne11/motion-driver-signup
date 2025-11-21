@@ -30,10 +30,15 @@ export function buildDriversFormula(
   const hasEmail = !!email;
   const hasPhone = !!phoneDigits;
   if (email) parts.push(`LOWER({${AIRTABLE_FIELDS.email}})='${esc(email)}'`);
-  if (phoneDigits)
-    parts.push(
-      `REGEX_REPLACE({${AIRTABLE_FIELDS.phone}}, '\\\\D', '')='${phoneDigits}'`
-    );
+  if (phoneDigits) {
+    const phoneFields = [
+      AIRTABLE_FIELDS.phone,
+      AIRTABLE_FIELDS.secondaryPhone,
+    ].filter(Boolean) as string[];
+    for (const fieldId of phoneFields) {
+      parts.push(`REGEX_REPLACE({${fieldId}}, '\\\\D', '')='${phoneDigits}'`);
+    }
+  }
   const formula = parts.length > 1 ? `OR(${parts.join(",")})` : parts[0];
   return { formula, hasEmail, hasPhone };
 }

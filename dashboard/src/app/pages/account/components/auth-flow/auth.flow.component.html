@@ -20,29 +20,34 @@
   </div>
 
   @if (authMode() === "login") {
-    <form [formGroup]="loginFormGroup" class="form-card auth-form">
+    <form
+      class="form-card auth-form"
+      (submit)="onSubmit(); $event.preventDefault()"
+    >
       <mat-form-field appearance="outline" class="field">
         <mat-label>Email Address</mat-label>
         <input
           matInput
-          formControlName="email"
+          [field]="loginForm.email"
           placeholder="enter your email address.."
-          required
+          aria-required="true"
         />
       </mat-form-field>
       <mat-form-field appearance="outline" class="field">
         <mat-label>Password</mat-label>
         <input
           matInput
-          formControlName="password"
-          [type]="hide() ? 'password' : 'text'"
+          [field]="loginForm.password"
+          type="password"
           placeholder="enter your password.."
+          aria-required="true"
+          #passwordInput
         />
         <button
           mat-icon-button
           matSuffix
           type="button"
-          (click)="clickEvent($event)"
+          (click)="togglePasswordVisibility($event, passwordInput)"
           [attr.aria-label]="hide() ? 'Show password' : 'Hide password'"
         >
           <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
@@ -57,9 +62,8 @@
         mat-flat-button
         color="primary"
         class="submit"
-        type="button"
-        (click)="onSubmit()"
-        [disabled]="loginFormGroup.invalid"
+        type="submit"
+        [disabled]="loginForm().invalid()"
       >
         SIGN IN
       </button>
@@ -98,51 +102,45 @@
       Please enter your details below to<br />create your driver account
     </p>
     <form
-      [formGroup]="registerFormGroup"
       class="form-card auth-form register-form"
+      (submit)="register(); $event.preventDefault()"
     >
       <mat-form-field appearance="outline" class="field">
         <mat-label>First name</mat-label>
-        <input matInput formControlName="firstName" required />
+        <input matInput [field]="registerForm.firstName" aria-required="true" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="field">
         <mat-label>Last name</mat-label>
-        <input matInput formControlName="lastName" required />
+        <input matInput [field]="registerForm.lastName" aria-required="true" />
       </mat-form-field>
       <mat-form-field appearance="outline" class="field">
         <mat-label>Phone number</mat-label>
         <input
           matInput
-          formControlName="phone"
+          [field]="registerForm.phone"
           type="tel"
           placeholder=""
-          required
+          aria-required="true"
         />
       </mat-form-field>
-      @if (
-        registerFormGroup.get("phone")?.touched &&
-        registerFormGroup.get("phone")?.hasError("required")
-      ) {
+      @let phoneField = registerForm.phone();
+      @if (phoneField.touched() && hasError(phoneField.errors(), "required")) {
         <p class="status error">Phone number is required.</p>
       }
-      @if (
-        registerFormGroup.get("phone")?.touched &&
-        registerFormGroup.get("phone")?.hasError("pattern")
-      ) {
+      @if (phoneField.touched() && hasError(phoneField.errors(), "pattern")) {
         <p class="status error">Phone must start with 0 and be 10 digits.</p>
       }
       <mat-form-field appearance="outline" class="field">
         <mat-label>Email Address</mat-label>
-        <input matInput formControlName="email" required />
+        <input matInput [field]="registerForm.email" aria-required="true" />
       </mat-form-field>
 
       <button
         mat-flat-button
         color="primary"
         class="submit"
-        type="button"
-        (click)="register()"
-        [disabled]="registerFormGroup.invalid"
+        type="submit"
+        [disabled]="registerForm().invalid()"
       >
         Create driver account
       </button>

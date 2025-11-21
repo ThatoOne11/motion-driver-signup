@@ -62,14 +62,19 @@ export const ResponseStatuses = {
   },
 };
 
+export const InspectorRegisterSchema = z.object({
+  airtableRecordId: z.string(),
+  motionId: z.string(),
+});
+
 // Registration payload for driver sign-up via Edge Function
 export const RegisterDriverRequest = z.object({
   fullName: z.string().min(1, "Full name is required"),
-  phone: z
-    .string()
-    .regex(/^0\d{9}$/, "Phone must be 10 digits starting with 0"),
+  phone: z.string(),
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  inspector: z.boolean().optional(),
+  inspectorDetails: z.array(InspectorRegisterSchema).optional(),
 });
 
 export type RegisterDriverRequest = z.infer<typeof RegisterDriverRequest>;

@@ -5,6 +5,7 @@ export type AirtableFieldMap = {
   fullName: string;
   email: string;
   phone: string;
+  secondaryPhone?: string;
   motionId: string;
   province: string;
   platforms: string;
@@ -13,10 +14,12 @@ export type AirtableFieldMap = {
   daysPerWeek: string;
 };
 
+
 export const AIRTABLE_FIELDS: AirtableFieldMap = {
   fullName: "fldHZDl1BpYSCW2t0",
   email: "fldcsVO3Po3RuAXOh",
   phone: "fldDGcjd67j7NuhLl",
+  secondaryPhone: "fldYtNSWlPwwgsG7b",
   motionId: "fldc7VDZmhzXDIQHA",
   province: "fldyL5hfNi66vHvd5",
   platforms: "fldH5IecuS2Hw4tIS",

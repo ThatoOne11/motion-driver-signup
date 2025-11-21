@@ -14,11 +14,11 @@ import {
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
-import { CommonModule } from '@angular/common';
+
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 @Component({
   selector: 'app-ag-grid',
-  imports: [AgGridAngular, CommonModule],
+  imports: [AgGridAngular],
   templateUrl: './ag-grid.html',
   styleUrl: './ag-grid.scss',
   standalone: true,
