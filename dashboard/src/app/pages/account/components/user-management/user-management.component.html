@@ -1,123 +1,116 @@
 <div class="profile-page">
   <app-motion-background></app-motion-background>
 
-  @switch (activeTab()) {
-    @case ("profile") {
-      <div class="hero">
-        <mat-icon class="logo" svgIcon="logo"></mat-icon>
-        <mat-icon class="info-icon">info_outlined</mat-icon>
-        <h1 class="welcome">
-          <span class="line-1">Welcome,</span>
-          <span class="line-2">{{ displayName }}</span>
-        </h1>
-      </div>
+  <app-loader></app-loader>
 
-      <p class="form-byline">
-        Below you’ll find your Motion Driver Profile Information
+  @if (!isLoading()) {
+    @switch (activeTab()) {
+      @case ("profile") {
+        <div class="hero">
+          <mat-icon class="logo" svgIcon="logo"></mat-icon>
+          <mat-icon class="info-icon">info_outlined</mat-icon>
+          <h1 class="welcome">
+            <span class="line-1">Welcome,</span>
+            <span class="line-2">{{ displayName }}</span>
+          </h1>
+        </div>
+
+        <p class="form-byline">
+          Below you’ll find your Motion Driver Profile Information
+        </p>
+
+        <app-profile-tab
+          class="form-card profile-details-card"
+          [profile]="profile()"
+        ></app-profile-tab>
+      }
+
+      @case ("documents") {
+        <div class="hero">
+          <mat-icon class="logo" svgIcon="logo"></mat-icon>
+          <mat-icon class="info-icon">info_outlined</mat-icon>
+          <h1 class="welcome">
+            <span class="line-1">{{ displayName }},</span>
+            <span class="line-2">Documents</span>
+          </h1>
+        </div>
+
+        <p class="form-byline">
+          Below you’ll find the data we have captured from the documents you
+          provided
+        </p>
+
+        <app-documents-tab
+          class="document-tab"
+          [licenceDisc]="licenceDisc()"
+          [driversLicence]="driversLicence()"
+          [idProof]="idProof()"
+          [topBoxPhotoUrl]="topBoxPhotoUrl()"
+        ></app-documents-tab>
+      }
+
+      @case ("details") {
+        <div class="hero">
+          <mat-icon class="logo" svgIcon="logo"></mat-icon>
+          <mat-icon class="info-icon">info_outlined</mat-icon>
+          <h1 class="welcome">
+            <span class="line-1">{{ displayName }},</span>
+            <span class="line-2">Account Details</span>
+          </h1>
+        </div>
+
+        <p class="form-byline">Below you’ll find your banking details</p>
+
+        <app-account-details-tab
+          class="form-card profile-details-card"
+          [bankingDetails]="bankingDetails()"
+        ></app-account-details-tab>
+      }
+    }
+
+    <nav class="profile-nav">
+      <ul>
+        <li class="nav-item" [class.active]="activeTab() === 'profile'">
+          <a (click)="setTab('profile')">
+            <mat-icon>person</mat-icon>
+            <span>Driver Profile</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="activeTab() === 'documents'">
+          <a (click)="setTab('documents')">
+            <mat-icon>description</mat-icon>
+            <span>Documents</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="activeTab() === 'details'">
+          <a (click)="setTab('details')">
+            <mat-icon>payments</mat-icon>
+            <span>Account Details</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <section class="support-section">
+      <p class="support-text">
+        For any assistance, updates or questions,
+        <br />
+        please contact Motion Support below.
       </p>
-
-      <app-profile-tab
-        class="form-card profile-details-card"
-        [profile]="profile()"
-      ></app-profile-tab>
-    }
-
-    @case ("documents") {
-      <div class="hero">
-        <mat-icon class="logo" svgIcon="logo"></mat-icon>
-        <mat-icon class="info-icon">info_outlined</mat-icon>
-        <h1 class="welcome">
-          <span class="line-1">{{ displayName }},</span>
-          <span class="line-2">Documents</span>
-        </h1>
-      </div>
-
-      <p class="form-byline">
-        Below you’ll find the data we have captured from the documents you
-        provided
-      </p>
-
-      <app-documents-tab
-        class="document-tab"
-        [licenceDisc]="licenceDisc()"
-        [driversLicence]="driversLicence()"
-        [idProof]="idProof()"
-        [topBoxPhotoUrl]="topBoxPhotoUrl()"
-      ></app-documents-tab>
-    }
-
-    @case ("details") {
-      <div class="hero">
-        <mat-icon class="logo" svgIcon="logo"></mat-icon>
-        <mat-icon class="info-icon">info_outlined</mat-icon>
-        <h1 class="welcome">
-          <span class="line-1">{{ displayName }},</span>
-          <span class="line-2">Account Details</span>
-        </h1>
-      </div>
-
-      <p class="form-byline">Below you’ll find your banking details</p>
-
-      <app-account-details-tab
-        class="form-card profile-details-card"
-        [bankingDetails]="bankingDetails()"
-      ></app-account-details-tab>
-    }
+      <button
+        mat-flat-button
+        class="action-button btn-support"
+        (click)="motionSupport()"
+      >
+        MOTION SUPPORT
+      </button>
+      <button
+        mat-flat-button
+        class="action-button btn-logout"
+        (click)="signOut()"
+      >
+        LOG OUT
+      </button>
+    </section>
   }
-
-  @if (activeTab() === "profile") {
-    <button
-      mat-flat-button
-      color="primary"
-      class="reset-button"
-      (click)="resetPassword()"
-    >
-      RESET PASSWORD
-    </button>
-  }
-
-  <nav class="profile-nav">
-    <ul>
-      <li class="nav-item" [class.active]="activeTab() === 'profile'">
-        <a (click)="setTab('profile')">
-          <mat-icon>person</mat-icon>
-          <span>Driver Profile</span>
-        </a>
-      </li>
-      <li class="nav-item" [class.active]="activeTab() === 'documents'">
-        <a (click)="setTab('documents')">
-          <mat-icon>description</mat-icon>
-          <span>Documents</span>
-        </a>
-      </li>
-      <li class="nav-item" [class.active]="activeTab() === 'details'">
-        <a (click)="setTab('details')">
-          <mat-icon>payments</mat-icon>
-          <span>Account Details</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
-
-  <section class="support-section">
-    <p class="support-text">
-      For any assistance, updates or questions,
-      <br />
-      please contact Motion Support below.
-    </p>
-    <button
-      mat-flat-button
-      class="action-button btn-support"
-      (click)="motionSupport()"
-    >
-      MOTION SUPPORT
-    </button>
-    <button
-      mat-flat-button
-      class="action-button btn-logout"
-      (click)="signOut()"
-    >
-      LOG OUT
-    </button>
-  </section>
 </div>

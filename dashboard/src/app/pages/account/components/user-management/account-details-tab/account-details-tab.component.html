@@ -3,27 +3,27 @@
     <dl class="profile-details">
       <div class="detail-item">
         <dt>Bank:</dt>
-        <dd>{{ bank.bank }}</dd>
+        <dd>{{ bank.bank || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Account Holder:</dt>
-        <dd>{{ bank.accountHolder }}</dd>
+        <dd>{{ bank.accountHolder || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Payment Reference:</dt>
-        <dd>{{ bank.paymentReference }}</dd>
+        <dd>{{ bank.paymentReference || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Branch Code:</dt>
-        <dd>{{ bank.branchCode }}</dd>
+        <dd>{{ bank.branchCode || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Account Number:</dt>
-        <dd>{{ bank.accountNumber }}</dd>
+        <dd>{{ bank.accountNumber || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Account Type:</dt>
-        <dd>{{ bank.accountType }}</dd>
+        <dd>{{ bank.accountType || "Not found" }}</dd>
       </div>
     </dl>
   } @else {

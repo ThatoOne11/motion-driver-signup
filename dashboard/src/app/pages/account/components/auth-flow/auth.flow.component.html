@@ -54,7 +54,7 @@
         </button>
       </mat-form-field>
       <div class="actions">
-        <button type="button" class="link" (click)="requestPasswordReset()">
+        <button type="button" class="link" (click)="openPasswordResetDialog()">
           Forgot Password?
         </button>
       </div>
@@ -67,11 +67,6 @@
       >
         SIGN IN
       </button>
-      @if (resetPasswordMessage()) {
-        <p class="status" [class.error]="isError()">
-          {{ resetPasswordMessage() }}
-        </p>
-      }
       <p class="legal">
         By continuing you agree to our
         <a [routerLink]="termsRoute">Terms of Service</a> and

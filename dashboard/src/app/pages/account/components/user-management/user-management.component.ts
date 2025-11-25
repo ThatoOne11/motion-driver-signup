@@ -25,6 +25,8 @@ import {
   LicenceDisc,
 } from '@account/models/user-management.models';
 import { UserManagementService } from './services/user-management.service';
+import { forkJoin, finalize } from 'rxjs';
+import { LoaderComponent } from '@core/components/loader/loader';
 
 @Component({
   selector: 'app-user-management',
@@ -36,6 +38,7 @@ import { UserManagementService } from './services/user-management.service';
     ProfileTabComponent,
     DocumentsTabComponent,
     AccountDetailsTabComponent,
+    LoaderComponent,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
@@ -58,33 +61,30 @@ export class UserManagementComponent implements OnInit {
   protected topBoxPhotoUrl = signal<string | null>(null);
   protected bankingDetails = signal<BankingDetails | null>(null);
 
+  // Loading State
+  protected isLoading = signal<boolean>(true);
+
   ngOnInit() {
-    this.userManagementService.getProfile().subscribe((data) => {
-      this.profile.set(data);
-    });
-
-    this.userManagementService.getLicenceDisc().subscribe((data) => {
-      this.licenceDisc.set(data);
-    });
-
-    this.userManagementService.getDriversLicence().subscribe((data) => {
-      this.driversLicence.set(data);
-    });
-
-    this.userManagementService.getIdProof().subscribe((data) => {
-      this.idProof.set(data);
-    });
-
-    this.userManagementService.getBankingDetails().subscribe((data) => {
-      this.bankingDetails.set(data);
-    });
-
-    this.userManagementService.getTopBoxPhotoUrl().subscribe((url) => {
-      this.topBoxPhotoUrl.set(url);
-    });
+    //forkjoin to load stuff in parallel and handle the loading state once
+    forkJoin({
+      profile: this.userManagementService.getProfile(),
+      licenceDisc: this.userManagementService.getLicenceDisc(),
+      driversLicence: this.userManagementService.getDriversLicence(),
+      idProof: this.userManagementService.getIdProof(),
+      bankingDetails: this.userManagementService.getBankingDetails(),
+      topBoxPhotoUrl: this.userManagementService.getTopBoxPhotoUrl(),
+    })
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe((results) => {
+        this.profile.set(results.profile);
+        this.licenceDisc.set(results.licenceDisc);
+        this.driversLicence.set(results.driversLicence);
+        this.idProof.set(results.idProof);
+        this.bankingDetails.set(results.bankingDetails);
+        this.topBoxPhotoUrl.set(results.topBoxPhotoUrl);
+      });
   }
 
-  //Sets the active tab view.
   setTab(tab: ActiveTab): void {
     this.activeTab.set(tab);
     window.scrollTo(0, 0);
@@ -94,13 +94,7 @@ export class UserManagementComponent implements OnInit {
     await this.authService.signOut();
   }
 
-  resetPassword() {
-    // TODO: Update with correct route constant
-    this.router.navigate(['/auth/forgot-password']);
-  }
-
   motionSupport() {
-    // TODO: Update with correct route constant
     this.router.navigate(['/support']);
   }
 }

@@ -12,6 +12,7 @@ import { MfaAuthService } from '@core/services/auth/auth.mfa.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {
   AccountRoutePaths,
   AccountRouteSubPaths,
@@ -20,6 +21,7 @@ import {
 import { RoutesService } from '@core/services/routes.service';
 import { environment } from '@environments/environment';
 import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
+import { PasswordResetDialogComponent } from '../password-reset-dialog/password-reset-dialog';
 import {
   LoginFormModel,
   RegisterFormModel,
@@ -35,6 +37,7 @@ import {
     MatIconModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule,
     MotionBackgroundComponent,
     RouterLink,
   ],
@@ -48,6 +51,7 @@ export class AccountAccessComponent implements OnInit {
   private router = inject(Router);
   private routesService = inject(RoutesService);
   private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
 
   private readonly loginModel = signal<LoginFormModel>({
     email: '',
@@ -76,8 +80,6 @@ export class AccountAccessComponent implements OnInit {
   }
 
   hide = signal(true);
-  resetPasswordMessage = signal('');
-  isError = signal(false);
   registerMessage = signal('');
   registerError = signal(false);
   authMode = signal<'login' | 'register'>('login');
@@ -97,9 +99,6 @@ export class AccountAccessComponent implements OnInit {
     if (mode === 'register') {
       this.registerMessage.set('');
       this.registerError.set(false);
-    } else {
-      this.resetPasswordMessage.set('');
-      this.isError.set(false);
     }
   }
 
@@ -122,8 +121,6 @@ export class AccountAccessComponent implements OnInit {
     );
     if (error) {
       console.error('Login failed:', error);
-      this.resetPasswordMessage.set(error.message);
-      this.isError.set(true);
     } else {
       if (environment.enforceMfa) {
         const hasTotpLinked = await this.mfaAuthService.hasTotpLinked();
@@ -142,30 +139,10 @@ export class AccountAccessComponent implements OnInit {
     }
   }
 
-  requestPasswordReset() {
-    const { email } = this.loginModel();
-    if (!email) {
-      this.resetPasswordMessage.set(
-        'Email is required to request a password reset.',
-      );
-      this.isError.set(true);
-    } else {
-      this.authService
-        .requestPasswordReset(email)
-        .then(() => {
-          this.resetPasswordMessage.set(
-            'If the account exists a password reset email has been sent.',
-          );
-          this.isError.set(false);
-        })
-        .catch((err) => {
-          console.error('Reset failed:', err);
-          this.resetPasswordMessage.set(
-            'There was an error requesting a password reset.',
-          );
-          this.isError.set(true);
-        });
-    }
+  openPasswordResetDialog() {
+    this.dialog.open(PasswordResetDialogComponent, {
+      width: '420px',
+    });
   }
 
   async register() {

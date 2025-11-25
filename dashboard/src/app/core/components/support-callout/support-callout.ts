@@ -1,12 +1,50 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  inject,
+} from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { SupportCalloutDialogComponent } from './support-callout-dialog/support-callout-dialog';
+import { SupportService } from '@core/services/support.service';
 
 @Component({
   selector: 'app-support-callout',
   standalone: true,
-  imports: [],
+  imports: [MatDialogModule],
   templateUrl: './support-callout.html',
   styleUrl: './support-callout.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SupportCalloutComponent {}
+export class SupportCalloutComponent {
+  @Input() preMessage = '';
+  @Input() name = '';
+  @Input() motionId = '';
+  @Input() requirePhone = false;
+  @Input() sourceTag = '';
+
+  private readonly dialog = inject(MatDialog);
+  private readonly supportService = inject(SupportService);
+
+  async openDialog() {
+    const context = await this.supportService.getOptionalUserContext();
+    const initialUserPhone = context.phone;
+    const shouldRequirePhone = this.requirePhone || !initialUserPhone;
+
+    this.dialog.open(SupportCalloutDialogComponent, {
+      width: '420px',
+      data: {
+        preMessage: this.preMessage,
+        name: this.name || context.name || '',
+        motionId: this.motionId || context.motionId || '',
+        sourceTag: this.sourceTag,
+        requirePhone: shouldRequirePhone,
+        initialUserPhone,
+        initialUserEmail: context.email,
+        initialUserName: context.name,
+        initialMotionId: context.motionId,
+      },
+    });
+  }
+}

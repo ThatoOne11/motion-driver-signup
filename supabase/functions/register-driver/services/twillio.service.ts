@@ -13,7 +13,14 @@ function toPhoneToE164(raw: string, cc: string): string {
 function ensureWhatsappPrefix(v: string) {
   return v.startsWith("whatsapp:") ? v : `whatsapp:${v}`;
 }
-function buildTokenAndSmsUrl(tokenHash: string) {
+type MagicLinkConfig = {
+  tokenHash: string;
+  supabaseLinkType: "invite" | "recovery";
+  redirectTo: string;
+  passthroughTitle: string;
+};
+
+function buildTokenAndSmsUrl(config: MagicLinkConfig) {
   const { SITE_URL, PASSWORD_RESET_REDIRECT, AUTH_URL, REDIRECT_URL } =
     getAppConfig();
   const siteEnv = (SITE_URL || "").replace(/\/+$/, "");
@@ -23,31 +30,31 @@ function buildTokenAndSmsUrl(tokenHash: string) {
   const authUrl = (
     AUTH_URL || `${getSupabaseConfig().SUPABASE_URL}/auth/v1/verify`
   ).replace(/\/+$/, "");
-  // Use REDIRECT_URL env or default to SITE_URL/account/sign-up
-  const redirectTo = (REDIRECT_URL || `${siteEnv}/account/sign-up`).replace(
-    /\/+$/,
-    ""
-  );
-  const redirectEncoded = encodeURIComponent(redirectTo);
-  const passthroughLink = `${authUrl}?token=${tokenHash}&type=invite&redirect_to=${redirectEncoded}`;
+  // Use provided redirectTo or fall back to REDIRECT_URL/site path
+  const redirectTarget = (
+    config.redirectTo ||
+    REDIRECT_URL ||
+    `${siteEnv}/account/sign-up`
+  ).replace(/\/+$/, "");
+  const redirectEncoded = encodeURIComponent(redirectTarget);
+  const passthroughLink = `${authUrl}?token=${config.tokenHash}&type=${config.supabaseLinkType}&redirect_to=${redirectEncoded}`;
   const encodedPassthrough = encodeURIComponent(passthroughLink);
-  const message = encodeURIComponent(
-    "Please click the link to verify your email!"
-  );
+  const message = encodeURIComponent(config.passthroughTitle);
   const fullSmsUrl = `${passthroughBase}?title=${message}&passthroughLink=${encodedPassthrough}`;
   const tokenForTemplate = `${message}&passthroughLink=${encodedPassthrough}`;
   return { tokenForTemplate, fullSmsUrl };
 }
 async function sendWhatsappTemplate(
   toPhone: string,
-  vars: Record<string, string>
+  vars: Record<string, string>,
+  options?: { contentSid?: string }
 ): Promise<string | null> {
   const cfg = getTwilioConfig();
   const accountSid = cfg.TWILIO_ACCOUNT_SID;
   const authToken = cfg.TWILIO_AUTH_TOKEN;
   const fromRaw = cfg.TWILIO_WHATSAPP_FROM;
   const cc = cfg.WHATSAPP_COUNTRY_CODE;
-  const contentSid = cfg.TWILIO_CONTENT_SID || "";
+  const contentSid = options?.contentSid || cfg.TWILIO_CONTENT_SID || "";
   if (!accountSid) throw new Error("TWILIO_ACCOUNT_SID is not set");
   if (!authToken) throw new Error("TWILIO_AUTH_TOKEN is not set");
   if (!fromRaw) throw new Error("TWILIO_WHATSAPP_FROM is not set");
@@ -113,36 +120,19 @@ async function sendSmsUrl(toPhone: string, bodyText: string): Promise<void> {
       `Twilio SMS send failed: ${res.status} ${await res.text()}`
     );
 }
-// ---------- Public API
-export async function sendVerificationWhatsAppAndSms(args: {
+
+type WhatsappDispatchArgs = {
   admin: any;
-  fullName: string;
   phone: string;
-  email: string;
-}): Promise<void> {
-  const { admin, fullName, phone, email } = args;
-  // 1) Generate invite to get the hashed token
-  const site = (getAppConfig().SITE_URL || "").replace(/\/+$/, "");
-  const { data, error } = await admin.auth.admin.generateLink({
-    type: "invite",
-    email,
-    options: { redirectTo: `${site}/account/sign-up` },
-  } as any);
-  if (error) throw new Error(error.message);
-  const tokenHash = (data as any)?.properties?.hashed_token as
-    | string
-    | undefined;
-  if (!tokenHash) throw new Error("Could not obtain invite token");
-  // 2) Build token variable and SMS URL (exact format)
-  const { tokenForTemplate, fullSmsUrl } = buildTokenAndSmsUrl(tokenHash);
-  const smsBodyText =
-    `MotionAds\n\nHi ${fullName},\n` +
-    `Please finish setting up your account by verifying your email:\n${fullSmsUrl}\n\n` +
-    `Thanks,\nThe MotionAds Team`;
-  // 3) Try WhatsApp first; if API call fails immediately, send SMS now.
-  //    If WhatsApp is accepted (SID returned) but later undelivered, the
-  //    twillio-callback function will send the SMS using this stored row.
-  //    In local development DRY_RUN mode, only record the fallback row and do not send anything.
+  smsBodyText: string;
+  templateVars: Record<string, string>;
+  contentSid?: string;
+};
+
+async function dispatchWhatsappWithFallback(
+  args: WhatsappDispatchArgs
+): Promise<void> {
+  const { admin, phone, smsBodyText, templateVars, contentSid } = args;
   const DRY_RUN = getEnvBool("TWILIO_DRY_RUN") || getEnvBool("LOCAL_NO_TWILIO");
   if (DRY_RUN) {
     const drySid = `dryrun-${crypto.randomUUID()}`;
@@ -162,10 +152,10 @@ export async function sendVerificationWhatsAppAndSms(args: {
     }
     return;
   }
+
   try {
-    const sid = await sendWhatsappTemplate(phone, {
-      name: fullName,
-      token: tokenForTemplate,
+    const sid = await sendWhatsappTemplate(phone, templateVars, {
+      contentSid,
     });
     if (sid) {
       try {
@@ -180,7 +170,6 @@ export async function sendVerificationWhatsAppAndSms(args: {
       }
     }
   } catch (_) {
-    // Immediate WA API failure: fall back to SMS unless in DRY_RUN
     const cfg = getTwilioConfig();
     if (!cfg.TWILIO_DRY_RUN) {
       await sendSmsUrl(phone, smsBodyText);
@@ -190,6 +179,96 @@ export async function sendVerificationWhatsAppAndSms(args: {
       });
     }
   }
+}
+// ---------- Public API
+export async function sendVerificationWhatsAppAndSms(args: {
+  admin: any;
+  fullName: string;
+  phone: string;
+  email: string;
+}): Promise<void> {
+  const { admin, fullName, phone, email } = args;
+  // 1) Generate invite to get the hashed token
+  const site = (getAppConfig().SITE_URL || "").replace(/\/+$/, "");
+  const redirectTarget = `${site}/account/sign-up`;
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: "invite",
+    email,
+    options: { redirectTo: redirectTarget },
+  } as any);
+  if (error) throw new Error(error.message);
+  const tokenHash = (data as any)?.properties?.hashed_token as
+    | string
+    | undefined;
+  if (!tokenHash) throw new Error("Could not obtain invite token");
+  // 2) Build token variable and SMS URL (exact format)
+  const { tokenForTemplate, fullSmsUrl } = buildTokenAndSmsUrl({
+    tokenHash,
+    supabaseLinkType: "invite",
+    redirectTo: redirectTarget,
+    passthroughTitle: "Please click the link to verify your email!",
+  });
+  const safeName = fullName?.trim() || email;
+  const smsBodyText =
+    `MotionAds\n\nHi ${safeName},\n` +
+    `Please finish setting up your account by verifying your email:\n${fullSmsUrl}\n\n` +
+    `Thanks,\nThe MotionAds Team`;
+  await dispatchWhatsappWithFallback({
+    admin,
+    phone,
+    smsBodyText,
+    templateVars: {
+      name: safeName,
+      token: tokenForTemplate,
+    },
+  });
+}
+
+export async function sendPasswordResetWhatsAppAndSms(args: {
+  admin: any;
+  email: string;
+  phone: string;
+  fullName?: string;
+  redirectTo?: string;
+}): Promise<void> {
+  const { admin, email, phone } = args;
+  const twilioCfg = getTwilioConfig();
+  const site = (getAppConfig().SITE_URL || "").replace(/\/+$/, "");
+  const redirectTarget = (
+    args.redirectTo || `${site}/account/password-reset`
+  ).replace(/\/+$/, "");
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: "recovery",
+    email,
+    options: { redirectTo: redirectTarget },
+  } as any);
+  if (error) throw new Error(error.message);
+  const tokenHash = (data as any)?.properties?.hashed_token as
+    | string
+    | undefined;
+  if (!tokenHash) throw new Error("Could not obtain recovery token");
+  const { tokenForTemplate, fullSmsUrl } = buildTokenAndSmsUrl({
+    tokenHash,
+    supabaseLinkType: "recovery",
+    redirectTo: redirectTarget,
+    passthroughTitle: "Reset your password",
+  });
+  const safeName = args.fullName?.trim() || email;
+  const smsBodyText =
+    `MotionAds\n\nHi ${safeName},\n` +
+    `Use the link below to reset your password:\n${fullSmsUrl}\n\n` +
+    `If you did not request this, you can ignore this message.\n` +
+    `Thanks,\nThe MotionAds Team`;
+  await dispatchWhatsappWithFallback({
+    admin,
+    phone,
+    smsBodyText,
+    templateVars: {
+      name: safeName,
+      token: tokenForTemplate,
+    },
+    contentSid: twilioCfg.TWILIO_RESET_SID || undefined,
+  });
 }
 // Back-compat wrappers so existing callers continue to work
 export async function sendRegistrationWhatsAppAndFallback(args: {

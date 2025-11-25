@@ -2,13 +2,11 @@
 export async function preUpdateUserDetails(
   supabaseAdmin: any,
   userId: string,
-  firstName?: string,
-  lastName?: string,
+  fullName?: string,
   phone?: string
 ) {
   const updatePayload: Record<string, any> = {};
-  if (firstName && lastName)
-    updatePayload.display_name = `${firstName} ${lastName}`;
+  if (fullName) updatePayload.display_name = fullName;
   if (phone) updatePayload.phone_number = phone;
   if (Object.keys(updatePayload).length === 0) return;
   const { error } = await supabaseAdmin

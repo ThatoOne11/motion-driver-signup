@@ -2,47 +2,39 @@
   <dl class="profile-details">
     <div class="detail-item">
       <dt>First Name:</dt>
-      <dd>{{ p.firstName }}</dd>
+      <dd>{{ p.firstName || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Last Name:</dt>
-      <dd>{{ p.lastName }}</dd>
+      <dd>{{ p.lastName || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Phone Number:</dt>
-      <dd>{{ p.phoneNumber }}</dd>
+      <dd>{{ p.phoneNumber || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Email:</dt>
-      <dd>{{ p.email }}</dd>
+      <dd>{{ p.email || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Motion ID:</dt>
-      <dd>{{ p.motionId }}</dd>
+      <dd>{{ p.motionId || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Province:</dt>
-      <dd>{{ p.province }}</dd>
-    </div>
-    <div class="detail-item">
-      <dt>City:</dt>
-      <dd>{{ p.city }}</dd>
-    </div>
-    <div class="detail-item">
-      <dt>Suburb:</dt>
-      <dd>{{ p.suburb }}</dd>
+      <dd>{{ p.province || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Platforms:</dt>
-      <dd>{{ p.platforms }}</dd>
+      <dd>{{ p.platforms || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Bike Ownership:</dt>
-      <dd>{{ p.bikeOwnership }}</dd>
+      <dd>{{ p.bikeOwnership || "Not found" }}</dd>
     </div>
     <div class="detail-item">
       <dt>Years Driving:</dt>
-      <dd>{{ p.yearsDriving }}</dd>
+      <dd>{{ p.yearsDriving || "Not found" }}</dd>
     </div>
   </dl>
 } @else {

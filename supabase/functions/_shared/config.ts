@@ -13,10 +13,7 @@ export function getEnv(
   return v;
 }
 
-export function getEnvBool(
-  name: string,
-  defaultValue = false
-): boolean {
+export function getEnvBool(name: string, defaultValue = false): boolean {
   const raw = getEnv(name);
   if (raw == null) return defaultValue;
   const normalized = raw.trim().toLowerCase();
@@ -58,6 +55,7 @@ export function getTwilioConfig() {
   const TWILIO_WHATSAPP_FROM = getEnvOrThrow("TWILIO_WHATSAPP_FROM");
   const WHATSAPP_COUNTRY_CODE = getEnv("WHATSAPP_COUNTRY_CODE") ?? "";
   const TWILIO_CONTENT_SID = getEnv("TWILIO_CONTENT_SID");
+  const TWILIO_RESET_SID = getEnv("TWILIO_RESET_SID");
   const TWILIO_STATUS_CALLBACK_URL = getEnv("TWILIO_STATUS_CALLBACK_URL");
   const TWILIO_MESSAGING_SERVICE_SID = getEnv("TWILIO_MESSAGING_SERVICE_SID");
   const TWILIO_SMS_FROM = getEnv("TWILIO_SMS_FROM");
@@ -69,6 +67,7 @@ export function getTwilioConfig() {
     TWILIO_WHATSAPP_FROM,
     WHATSAPP_COUNTRY_CODE,
     TWILIO_CONTENT_SID,
+    TWILIO_RESET_SID,
     TWILIO_STATUS_CALLBACK_URL,
     TWILIO_MESSAGING_SERVICE_SID,
     TWILIO_SMS_FROM,

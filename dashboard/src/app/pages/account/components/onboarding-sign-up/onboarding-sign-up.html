@@ -1,32 +1,77 @@
-<div class="page">
-  <div class="content">
-    <div class="logo-container">
-      <mat-icon class="logo" svgIcon="logo"></mat-icon>
-    </div>
-    @if (errorMessage()) {
-      <p class="error-text">{{ errorMessage() }}</p>
-    } @else {
-      @if (mode() === "pending") {
-        <mat-icon class="mail">mark_email_unread</mat-icon>
-        <app-page-title [title]="'Check your WhatsApp'"></app-page-title>
-        <p class="description">
-          Thank you for signing up to Motion Ads to be a driver. We have send a
-          WhatsApp with a confirmation link for you to confirm your detials.
-          Please click the link in the WhatsApp message to continue your Motion
-          Ads driver journey
-        </p>
-        <button mat-flat-button class="primary" (click)="toLogin()">
-          Back to sign in
-        </button>
-      } @else {
-        <mat-icon class="check">check_circle_outline</mat-icon>
-        <app-page-title
-          [title]="'Your email has been verified!'"
-        ></app-page-title>
-        <button class="reset-button" mat-flat-button (click)="ResetPassword()">
-          Reset password
-        </button>
-      }
+<div class="confirmation">
+  <app-motion-background></app-motion-background>
+  <div class="logo">
+    @if (mode() === "pending") {
+      <button class="back-btn" (click)="close()">
+        <img src="assets/icons/arrow-left.svg" alt="Back" />
+      </button>
     }
+    <img src="assets/icons/logo.svg" alt="Logo" class="main-logo" />
   </div>
+
+  @if (errorMessage()) {
+    <div class="status-card error-card">
+      <p class="error-text">{{ errorMessage() }}</p>
+    </div>
+  } @else {
+    @if (mode() === "pending") {
+      <div class="status-card pending-card">
+        <div class="header">
+          <div class="heading-one">
+            <h1>Thank You</h1>
+          </div>
+          <div class="heading-two">
+            <h1>for Signing Up</h1>
+          </div>
+        </div>
+
+        <img
+          src="assets/images/message.png"
+          alt="Message"
+          class="message-img"
+        />
+
+        <div class="body">
+          <p>
+            We’ve sent you a message by WhatsApp or SMS with a link to verify
+            your account.
+          </p>
+        </div>
+
+        <div class="text">
+          <p>
+            Please open that link to confirm your phone number and set your
+            password before you complete your profile. If you don’t see it in a
+            few minutes please try again or contact Motion Support.
+          </p>
+        </div>
+      </div>
+    } @else {
+      <div class="password-reset">
+        <div class="header">
+          <div class="heading-one">
+            <h1>Create a Password</h1>
+          </div>
+          <div class="heading-two">
+            <h1>for Your Account</h1>
+          </div>
+        </div>
+        <div class="check"></div>
+        <div class="verified">
+          <mat-icon class="check-icon">check_circle</mat-icon>
+          <p>Your email has been verified!</p>
+          <button
+            mat-button
+            color="primary"
+            class="reset-btn"
+            (click)="ResetPassword()"
+          >
+            RESET PASSWORD
+          </button>
+        </div>
+      </div>
+    }
+  }
+
+  <app-support-callout sourceTag="Onboarding Sign Up"></app-support-callout>
 </div>

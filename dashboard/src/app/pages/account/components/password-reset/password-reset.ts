@@ -7,6 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { RoutesService } from '@core/services/routes.service';
+import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
+import { SupportCalloutComponent } from '@core/components/support-callout/support-callout';
 
 @Component({
   selector: 'app-password-reset',
@@ -16,6 +18,8 @@ import { RoutesService } from '@core/services/routes.service';
     MatButtonModule,
     MatIconModule,
     FormsModule,
+    MotionBackgroundComponent,
+    SupportCalloutComponent,
   ],
   templateUrl: './password-reset.html',
   styleUrl: './password-reset.scss',

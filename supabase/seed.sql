@@ -206,3 +206,8 @@ values
   ('Name'),
   ('Email Address'),
   ('Motion ID') on conflict (name) do nothing;
+
+insert into
+  public.motion_support (phone_number)
+values
+  ('+27823626215') on conflict (phone_number) do nothing;

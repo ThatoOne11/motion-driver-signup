@@ -14,6 +14,11 @@ $page-padding-local: 24px;
   // This overrides the hidden icon from the mixin
   .hero .info-icon {
     display: block;
+    top: 5px !important;
+  }
+
+  .hero {
+    padding-top: 0px !important;
   }
 }
 

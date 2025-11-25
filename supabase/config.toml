@@ -375,6 +375,12 @@ entrypoint = "./functions/invite-user/index.ts"
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/invite-user/*.html" ]
 
+[functions.password-reset]
+enabled = true
+verify_jwt = false
+import_map = "./functions/password-reset/deno.json"
+entrypoint = "./functions/password-reset/index.ts"
+
 [functions.driver-profile]
 enabled = true
 verify_jwt = true
@@ -418,3 +424,24 @@ entrypoint = "./functions/inspector-search/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/inspector-search/*.html" ]
+
+[functions.get-driver-profile]
+enabled = true
+verify_jwt = true
+import_map = "./functions/get-driver-profile/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/get-driver-profile/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/get-driver-profile/*.html" ]
+[functions.support-callout]
+enabled = true
+verify_jwt = true
+import_map = "./functions/support-callout/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/support-callout/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/support-callout/*.html" ]

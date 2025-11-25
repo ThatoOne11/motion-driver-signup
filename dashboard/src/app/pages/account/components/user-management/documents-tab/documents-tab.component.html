@@ -4,15 +4,15 @@
     <dl class="profile-details">
       <div class="detail-item">
         <dt>Bike Make:</dt>
-        <dd>{{ ld.bikeMake }}</dd>
+        <dd>{{ ld.bikeMake || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Expiry Date:</dt>
-        <dd>{{ ld.expiryDate }}</dd>
+        <dd>{{ ld.expiryDate || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Licence No.:</dt>
-        <dd>{{ ld.licenceNo }}</dd>
+        <dd>{{ ld.licenceNo || "Not found" }}</dd>
       </div>
     </dl>
   } @else {
@@ -26,27 +26,27 @@
     <dl class="profile-details">
       <div class="detail-item">
         <dt>Name:</dt>
-        <dd>{{ dl.name }}</dd>
+        <dd>{{ dl.name || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Codes:</dt>
-        <dd>{{ dl.codes }}</dd>
+        <dd>{{ dl.codes || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Valid To:</dt>
-        <dd>{{ dl.validTo }}</dd>
+        <dd>{{ dl.validTo || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>ID No.:</dt>
-        <dd>{{ dl.idNo }}</dd>
+        <dd>{{ dl.idNo || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Valid From:</dt>
-        <dd>{{ dl.validFrom }}</dd>
+        <dd>{{ dl.validFrom || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>First Issue Date:</dt>
-        <dd>{{ dl.firstIssueDate }}</dd>
+        <dd>{{ dl.firstIssueDate || "Not found" }}</dd>
       </div>
     </dl>
   } @else {
@@ -60,23 +60,23 @@
     <dl class="profile-details">
       <div class="detail-item">
         <dt>Full Name:</dt>
-        <dd>{{ id.fullName }}</dd>
+        <dd>{{ id.fullName || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>ID No.:</dt>
-        <dd>{{ id.idNo }}</dd>
+        <dd>{{ id.idNo || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Nationality:</dt>
-        <dd>{{ id.nationality }}</dd>
+        <dd>{{ id.nationality || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Date of Birth:</dt>
-        <dd>{{ id.dateOfBirth }}</dd>
+        <dd>{{ id.dateOfBirth || "Not found" }}</dd>
       </div>
       <div class="detail-item">
         <dt>Date of Issue:</dt>
-        <dd>{{ id.dateOfIssue }}</dd>
+        <dd>{{ id.dateOfIssue || "Not found" }}</dd>
       </div>
     </dl>
   } @else {

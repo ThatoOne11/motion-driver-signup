@@ -1,12 +1,18 @@
-
 import { Component, OnInit, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute } from '@angular/router';
 import { PageTitleComponent } from '@shared-components/page-title/page-title.component';
+import { MotionBackgroundComponent } from '@shared-components/motion-background/motion-background.component';
+import { SupportCalloutComponent } from '@core/components/support-callout/support-callout';
 
 @Component({
   selector: 'app-email-passthrough',
-  imports: [MatIconModule, PageTitleComponent],
+  imports: [
+    MatIconModule,
+    PageTitleComponent,
+    MotionBackgroundComponent,
+    SupportCalloutComponent,
+  ],
   templateUrl: './email-passthrough.html',
   styleUrl: './email-passthrough.scss',
 })

@@ -14,6 +14,7 @@
 // GEMINI_API_KEY = "";
 // GEMINI_MODEL = "gemini-2.0-flash-lite";
 // TWILIO_CONTENT_SID = "";
+// TWILIO_RESET_SID = "";
 // TWILIO_STATUS_CALLBACK_URL =
 //   "https://azvgjxdpblpfkfqgriqk.supabase.co/functions/v1/twillio-callback";
 // TWILIO_MESSAGING_SERVICE_SID = "";

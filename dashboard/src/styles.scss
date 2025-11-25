@@ -53,9 +53,14 @@ html {
   );
   @include mat.dialog-overrides(
     (
-      container-min-width: 750px,
-      headline-padding: 24px,
-      content-padding: 24px,
+      container-min-width: 320px,
+      container-max-width: 480px,
+      container-small-max-width: 480px,
+      container-shape: 24px,
+      headline-padding: 16px 20px 8px,
+      content-padding: 12px 20px 20px,
+      actions-padding: 0 20px 20px,
+      actions-alignment: center,
       supporting-text-color: black,
     )
   );

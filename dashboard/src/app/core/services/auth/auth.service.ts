@@ -81,12 +81,28 @@ export class AuthService {
     clearItem(AuthConstants.DISPLAY_NAME);
   }
 
-  public async requestPasswordReset(email: string): Promise<void> {
-    const { error } =
-      await this.supabase.supabaseClient.auth.resetPasswordForEmail(email);
+  public async requestPasswordReset(phone: string): Promise<void> {
+    const { data, error } =
+      await this.supabase.supabaseClient.functions.invoke<{
+        Message?: string;
+        HasErrors?: boolean;
+        Error?: string;
+      }>(SupabaseEdgeFunctions.PASSWORD_RESET, {
+        body: { phone },
+      });
 
     if (error) {
-      throw new Error(error.message);
+      throw new Error(
+        'We could not send the reset link right now. Please try again.'
+      );
+    }
+
+    if (data?.HasErrors) {
+      throw new Error(
+        data?.Message ??
+          data?.Error ??
+          'We could not send the reset link. Please check the number and try again.'
+      );
     }
   }
 
