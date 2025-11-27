@@ -27,6 +27,7 @@ import {
 import { UserManagementService } from './services/user-management.service';
 import { forkJoin, finalize } from 'rxjs';
 import { LoaderComponent } from '@core/components/loader/loader';
+import { LoaderService } from '@core/services/loading.service';
 
 @Component({
   selector: 'app-user-management',
@@ -48,6 +49,7 @@ export class UserManagementComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private userManagementService = inject(UserManagementService);
+  private loaderService = inject(LoaderService);
 
   //Signal to track the currently active tab view.
   protected activeTab = signal<ActiveTab>('profile');
@@ -65,6 +67,8 @@ export class UserManagementComponent implements OnInit {
   protected isLoading = signal<boolean>(true);
 
   ngOnInit() {
+    this.loaderService.loadingOn();
+
     //forkjoin to load stuff in parallel and handle the loading state once
     forkJoin({
       profile: this.userManagementService.getProfile(),
@@ -74,7 +78,12 @@ export class UserManagementComponent implements OnInit {
       bankingDetails: this.userManagementService.getBankingDetails(),
       topBoxPhotoUrl: this.userManagementService.getTopBoxPhotoUrl(),
     })
-      .pipe(finalize(() => this.isLoading.set(false)))
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+          this.loaderService.loadingOff();
+        }),
+      )
       .subscribe((results) => {
         this.profile.set(results.profile);
         this.licenceDisc.set(results.licenceDisc);
@@ -87,7 +96,12 @@ export class UserManagementComponent implements OnInit {
 
   setTab(tab: ActiveTab): void {
     this.activeTab.set(tab);
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    }, 0);
   }
 
   async signOut() {

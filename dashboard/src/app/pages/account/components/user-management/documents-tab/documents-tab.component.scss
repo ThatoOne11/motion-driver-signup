@@ -36,7 +36,10 @@
     padding: 15px 0;
     border-bottom: 1px solid v.$card-border;
     font-size: 0.9rem;
-    word-break: break-word;
+
+    dd {
+      text-align: right;
+    }
 
     &:last-child {
       border-bottom: none;
