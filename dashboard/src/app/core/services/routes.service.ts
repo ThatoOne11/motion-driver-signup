@@ -6,6 +6,7 @@ import { Roles } from '@core/constants/auth.role.constants';
 import {
   ADMIN_LANDING_PAGE,
   CLIENT_LANDING_PAGE,
+  DRIVER_LANDING_PAGE,
 } from '@core/constants/routes.constants';
 
 @Injectable({
@@ -19,6 +20,8 @@ export class RoutesService {
 
     if (userRole === Roles.ADMIN || userRole === Roles.SUPER_ADMIN) {
       return ADMIN_LANDING_PAGE;
+    } else if (userRole === Roles.DRIVER) {
+      return DRIVER_LANDING_PAGE;
     } else {
       return CLIENT_LANDING_PAGE;
     }

@@ -45,3 +45,4 @@ export namespace AccountRouteSubPaths {
 export const ADMIN_LANDING_PAGE = `/${RoutePaths.DASHBOARD}`;
 export const CLIENT_LANDING_PAGE = `/${RoutePaths.DASHBOARD}`;
 export const INSPECTOR_LANDING_PAGE = `/${RoutePaths.INSPECTOR}`;
+export const DRIVER_LANDING_PAGE = `/${AccountRoutePaths.USER_MANAGEMENT}`;

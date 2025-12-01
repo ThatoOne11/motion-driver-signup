@@ -1,217 +1,208 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
     <title>You're invited to Motion Ads</title>
+    <style>
+      table,
+      td,
+      div,
+      h1,
+      p {
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      /* Mobile styles */
+      @media only screen and (max-width: 640px) {
+        .main-td {
+          padding: 20px !important;
+        }
+        .content-table {
+          width: 100% !important;
+          max-width: 600px !important;
+        }
+        .bike-image {
+          width: 100% !important;
+          max-width: 432px !important;
+          height: auto !important;
+        }
+        .content-padding {
+          padding: 20px !important;
+        }
+        .mobile-btn {
+          width: 100% !important;
+          display: block !important;
+        }
+      }
+    </style>
   </head>
-  <body
-    style="
-      font-family: &quot;Segoe UI&quot;, Arial, sans-serif;
-      background-color: #f4effb;
-      padding: 0;
-      margin: 0;
-    "
-  >
-    <table
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      style="background-color: #f4effb; padding: 40px 0"
-    >
-      <tr>
-        <td align="center">
-          <!-- Logo Box -->
-          <table
-            width="600"
-            cellpadding="30"
-            cellspacing="0"
-            style="background-color: #f4effb; margin-bottom: 20px"
-          >
-            <tr>
-              <td align="center">
-                <img
-                  src="https://yjodbtnnirdrprkyhmum.supabase.co/storage/v1/object/public/media/icon.png"
-                  alt="Motion Ads icon"
-                  width="72"
-                  style="display: block; margin-bottom: 16px"
-                />
-                <img
-                  src="https://yjodbtnnirdrprkyhmum.supabase.co/storage/v1/object/public/media/brand_logo.png"
-                  alt="Motion Ads"
-                  width="220"
-                  style="display: block"
-                />
-              </td>
-            </tr>
-          </table>
-
-          <!-- Greeting Box -->
-          <table
-            width="600"
-            cellpadding="30"
-            cellspacing="0"
-            style="
-              border-radius: 16px;
-              margin-bottom: 20px;
-              background: linear-gradient(
-                135deg,
-                rgba(101, 49, 142, 0.15),
-                rgba(38, 168, 224, 0.15)
-              );
-            "
-          >
-            <tr>
-              <td align="center" style="text-align: center">
-                <p style="font-size: 24px; color: #35184f; margin: 0">
-                  Hi
-                  {{ if .User }}
-                    {{ if .User.UserMetadata.full_name }}{{ .User.UserMetadata.full_name }}{{ else }}{{ .User.Email }}{{ end }}
-                  {{ else }}
-                    {{ .Email }}
-                  {{ end }},
-                </p>
-                <br /><br />
-                <p style="font-size: 24px; color: #35184f; margin: 0">
-                  You’ve been invited to join the
-                  <strong>Motion Ads</strong> platform.
-                </p>
-              </td>
-            </tr>
-          </table>
-
-          <!-- Main Content Box -->
-          <table
-            width="600"
-            cellpadding="30"
-            cellspacing="0"
-            style="background-color: #ffffff; border-radius: 16px"
-          >
-            <tr>
-              <td>
-                <p style="font-size: 16px; color: #3f3a4a">
-                  To complete your account setup and access the platform, please
-                  follow these simple steps:
-                </p>
-
-                <br /><br />
-
-                <ol
-                  style="
-                    font-size: 16px;
-                    color: #3f3a4a;
-                    padding-left: 20px;
-                    margin: 0;
-                  "
-                >
-                  <li>
-                    Click the button below to
-                    <strong
-                      ><span style="color: #65318e"
-                        >confirm your email</span
-                      ></strong
-                    >
-                    using your secure Motion Ads invitation link.
-                  </li>
-                  <br /><br />
-                  <li>
-                    Set a password so you can sign back in whenever you need.
-                  </li>
-                  <br /><br />
-                  <li>
-                    Log in at
-                    <a
-                      href="{{ .SiteURL }}"
-                      style="
-                        color: #26a8e0;
-                        text-decoration: none;
-                        font-weight: 600;
-                      "
-                      >{{ .SiteURL }}</a
-                    >
-                    and start creating campaigns with Motion Ads.
-                  </li>
-                </ol>
-
-                <br /><br />
-
-                <p style="font-size: 16px; text-align: center; margin: 30px 0">
-                  <a
-                    href="{{ .SiteURL }}/account/passthrough?title=Your email has been verified!&passthroughLink={{ .ConfirmationURL }}/account/sign-up"
-                    style="
-                      background: linear-gradient(135deg, #65318e, #26a8e0);
-                      color: #ffffff;
-                      padding: 12px 24px;
-                      border-radius: 999px;
-                      text-decoration: none;
-                      font-weight: bold;
-                      display: inline-block;
-                    "
-                    >Confirm Email Address</a
-                  >
-                </p>
-
-                <br /><br />
-
-                <p style="font-size: 14px; color: #6d6880">
-                  If you didn’t expect this invitation, please reach out to
-                  <a href="mailto:support@motionads.com" style="color: #26a8e0"
-                    >support@motionads.com</a
-                  >.
-                </p>
-
-                <br /><br />
-
-                <p style="font-size: 16px; color: #3f3a4a">
-                  Welcome to Motion Ads – we’re excited to have you on board!
-                </p>
-
-                <br /><br />
-
-                <p style="font-size: 16px; color: #3f3a4a">
-                  Best regards,<br />
-                  The Motion Ads Team
-                </p>
-
-                <br /><br />
-
-                <p style="font-size: 14px; font-style: italic; color: #6d6880">
-                  Visit Motion Ads anytime at
-                  <a href="{{ .SiteURL }}" style="color: #26a8e0"
-                    >{{ .SiteURL }}</a
-                  >.
-                </p>
-
-                <br /><br />
-
-                <hr
-                  style="
-                    border: none;
-                    border-top: 1px solid #eee;
-                    margin: 30px 0;
-                  "
-                />
-
-                <p style="font-size: 12px; color: #8a86a1; text-align: center">
+  <body style="margin: 0; padding: 0; background-color: white">
+    <div style="background-color: white">
+      <table
+        role="presentation"
+        width="100%"
+        border="0"
+        cellspacing="0"
+        cellpadding="0"
+        style="min-width: 100%"
+      >
+        <tr>
+          <td align="center" class="main-td" style="padding: 40px">
+            <table
+              role="presentation"
+              width="600"
+              class="content-table"
+              border="0"
+              cellspacing="0"
+              cellpadding="0"
+              style="width: 600px; max-width: 600px; margin: 0 auto"
+            >
+              <tr>
+                <td align="center" style="padding-bottom: 20px">
                   <img
-                    src="https://yjodbtnnirdrprkyhmum.supabase.co/storage/v1/object/public/media/brand_logo.png"
-                    alt="Motion Ads"
-                    width="160"
-                    style="display: block; margin: 0 auto 20px"
+                    src="https://azvgjxdpblpfkfqgriqk.supabase.co/storage/v1/object/public/email-assets/logo.png"
+                    alt="Motion Ads Logo"
+                    width="180"
+                    style="
+                      display: block;
+                      border: 0;
+                      outline: none;
+                      text-decoration: none;
+                    "
                   />
-                  &copy; 2025 Motion Ads. All rights reserved.<br />
-                  <a href="{{ .SiteURL }}/terms" style="color: #8a86a1"
-                    >Terms of Service</a
+                </td>
+              </tr>
+
+              <tr>
+                <td align="center">
+                  <table
+                    role="presentation"
+                    width="100%"
+                    border="0"
+                    cellspacing="0"
+                    cellpadding="0"
                   >
-                  |
-                  <a href="{{ .SiteURL }}/privacy" style="color: #8a86a1"
-                    >Privacy Policy</a
-                  >
-                </p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
+                    <tr>
+                      <td align="center">
+                        <img
+                          src="https://azvgjxdpblpfkfqgriqk.supabase.co/storage/v1/object/public/email-assets/bike%20with%20confetti.png"
+                          alt="Delivery Bike with confetti"
+                          width="432"
+                          class="bike-image"
+                          style="
+                            display: block;
+                            border: 0;
+                            outline: none;
+                            text-decoration: none;
+                          "
+                        />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td
+                        class="content-padding"
+                        style="padding: 40px; text-align: center"
+                      >
+                        <h1
+                          style="
+                            margin: 0 0 20px 0;
+                            font-size: 24px;
+                            color: #5b2c84;
+                            font-weight: bold;
+                            font-family:
+                              &quot;Arial Rounded MT Bold&quot;,
+                              &quot;Arial Rounded MT&quot;, Arial, sans-serif;
+                          "
+                        >
+                          Hi, {{ .Email }},
+                        </h1>
+
+                        <p
+                          style="
+                            margin: 0 0 30px 0;
+                            font-size: 16px;
+                            line-height: 1.5;
+                          "
+                        >
+                          You have been invited to join the new sign up platform
+                          as an inspector. Please confirm your email address to
+                          continue.
+                        </p>
+
+                        <table
+                          role="presentation"
+                          border="0"
+                          cellspacing="0"
+                          cellpadding="0"
+                          style="margin: 0 auto"
+                        >
+                          <tr>
+                            <td
+                              align="center"
+                              style="
+                                border-radius: 50px;
+                                background-color: #29a6e0;
+                              "
+                            >
+                              <a
+                                href="{{ .SiteURL }}/account/passthrough?title=Complete your account setup&passthroughLink={{ .ConfirmationURL }}/account/sign-up"
+                                target="_blank"
+                                style="
+                                  font-size: 16px;
+                                  font-family:
+                                    &quot;Segoe UI&quot;, Arial, sans-serif;
+                                  color: white;
+                                  text-decoration: none;
+                                  text-decoration-line: none;
+                                  padding: 15px 40px;
+                                  border: 1px solid #29a6e0;
+                                  display: inline-block;
+                                  font-weight: bold;
+                                  border-radius: 50px;
+                                "
+                              >
+                                CONFIRM
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td style="padding-bottom: 40px; text-align: center">
+                        <p style="margin: 0; font-size: 16px; line-height: 1.5">
+                          Best Regards,<br />
+                          The MotionAds Team
+                        </p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td align="center">
+                        <p
+                          style="
+                            margin: 0;
+                            font-size: 14px;
+                            line-height: 1.5;
+                            color: #29a6e0;
+                          "
+                        >
+                          If you did not request this email<br />confirmation,
+                          please ignore this email.
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

@@ -79,16 +79,20 @@ export const RegisterDriverRequest = z.object({
 
 export type RegisterDriverRequest = z.infer<typeof RegisterDriverRequest>;
 
-// Invite user payload (admin-triggered)
-export const InviteUserRequest = z.object({
-  email: z.string().email(),
-  displayName: z.string().min(1, "Display name is required"),
-  phoneNumber: z
-    .string()
-    .regex(/^0\d{9}$/, "Phone must start with 0 and be 10 digits"),
-  role: z.enum(["admin", "driver"]),
+// Invite inspector payload - Can Invite Multiple Users at once.
+export const InspectorInviteRequest = z.object({
+  users: z.array(
+    z.object({
+      email: z.string().email(),
+      displayName: z.string().min(1),
+      phoneNumber: z
+        .string()
+        .regex(/^0\d{9}$/, "Phone must start with 0 and be 10 digits"),
+      role: z.enum(["inspector"]),
+    })
+  ),
 });
 
-export type InviteUserRequest = z.infer<typeof InviteUserRequest>;
+export type InspectorInviteRequest = z.infer<typeof InspectorInviteRequest>;
 
 export const DriverRegisterSchema = z.object({});

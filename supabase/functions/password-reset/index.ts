@@ -56,13 +56,15 @@ Deno.serve(async (req) => {
     }
 
     const phone = parsed.data.phone.trim();
+    const localPhone = phone; // e.g., 082... (what the UI collects)
+    const internationalPhone = `+27${localPhone.slice(1)}`; // e.g., +2782...
     const { SUPABASE_URL, SERVICE_ROLE_KEY } = getSupabaseConfig();
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
     const { data: userRow, error: userError } = await admin
       .from("users")
       .select("display_name, phone_number, email")
-      .eq("phone_number", phone)
+      .in("phone_number", [localPhone, internationalPhone])
       .maybeSingle();
 
     if (userError) {
