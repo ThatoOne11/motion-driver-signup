@@ -52,6 +52,7 @@ app-motion-background {
 
   .heading-one {
     color: var(--mat-sys-neutral10);
+    margin-bottom: -18px;
   }
 
   .heading-two {
@@ -64,10 +65,9 @@ app-motion-background {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: clamp(1rem, 5vw, 2rem) 0;
 
   img {
-    width: clamp(12rem, 40vw, 26rem);
+    width: clamp(15rem, 40vw, 40rem);
     height: auto;
     object-fit: contain;
   }
@@ -97,7 +97,6 @@ app-motion-background {
   text-align: center;
   padding: clamp(1.5rem, 4vw, 2.25rem);
   border-radius: 18px;
-  margin: 0 auto clamp(2.5rem, 6vw, 4rem);
   width: clamp(280px, 70vw, 520px);
   box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
 

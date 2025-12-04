@@ -21,7 +21,6 @@ export class SupportCalloutComponent {
   @Input() preMessage = '';
   @Input() name = '';
   @Input() motionId = '';
-  @Input() requirePhone = false;
   @Input() sourceTag = '';
 
   private readonly dialog = inject(MatDialog);
@@ -29,8 +28,6 @@ export class SupportCalloutComponent {
 
   async openDialog() {
     const context = await this.supportService.getOptionalUserContext();
-    const initialUserPhone = context.phone;
-    const shouldRequirePhone = this.requirePhone || !initialUserPhone;
 
     this.dialog.open(SupportCalloutDialogComponent, {
       width: '420px',
@@ -39,8 +36,6 @@ export class SupportCalloutComponent {
         name: this.name || context.name || '',
         motionId: this.motionId || context.motionId || '',
         sourceTag: this.sourceTag,
-        requirePhone: shouldRequirePhone,
-        initialUserPhone,
         initialUserEmail: context.email,
         initialUserName: context.name,
         initialMotionId: context.motionId,

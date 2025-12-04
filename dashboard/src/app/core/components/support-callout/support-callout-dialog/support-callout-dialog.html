@@ -24,30 +24,6 @@
       </span>
     </div>
 
-    <div *ngIf="requirePhone">
-      <label for="userPhoneNumber" class="label">Phone number</label>
-      <input
-        id="userPhoneNumber"
-        type="tel"
-        formControlName="userPhoneNumber"
-        placeholder="e.g. 082 123 4567"
-      />
-      <div
-        class="field-error"
-        *ngIf="
-          form.get('userPhoneNumber')?.touched &&
-          form.get('userPhoneNumber')?.invalid
-        "
-      >
-        <span *ngIf="form.get('userPhoneNumber')?.errors?.['required']">
-          Phone number is required.
-        </span>
-        <span *ngIf="form.get('userPhoneNumber')?.errors?.['pattern']">
-          Enter a valid phone number.
-        </span>
-      </div>
-    </div>
-
     <div class="actions">
       <button
         type="button"

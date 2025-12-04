@@ -3,7 +3,6 @@ export type SupportType = {
   userMessage: string;
   name: string;
   motionId: string;
-  userPhoneNumber?: string;
   userEmail?: string;
   sourceTag?: string;
 };

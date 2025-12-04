@@ -27,6 +27,7 @@ app-motion-background {
     font-weight: 500;
     color: var(--mat-sys-neutral10);
     font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-bottom: -10px;
   }
 
   h2 {
@@ -39,7 +40,7 @@ app-motion-background {
   p {
     font-weight: 250;
     font-size: clamp(1rem, 4vw, 1.25rem);
-    max-width: clamp(70vw, 36rem, 50vw);
+    max-width: clamp(90vw, 36rem, 50vw);
     color: var(--mat-sys-primary);
   }
 
@@ -122,7 +123,7 @@ app-motion-background {
 
   h2 {
     color: var(--mat-sys-primary);
-    max-width: 75%;
+    max-width: 100%;
     text-align: center;
     font-size: 16px;
     font-weight: 100;

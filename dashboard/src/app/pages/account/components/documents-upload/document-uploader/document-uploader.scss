@@ -31,7 +31,7 @@
 .dropzone--has-file {
   border-style: solid;
   background: #f4f4f4;
-  padding: 32px;
+  padding: 20px;
   align-items: stretch;
 }
 
@@ -93,7 +93,7 @@
 }
 
 .trash {
-  color: #e65a39;
+  color: var(--mat-sys-error);
 }
 
 .actions {

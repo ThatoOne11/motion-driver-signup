@@ -6,7 +6,7 @@ export const SupportSchema = z.object({
   name: z.string().trim().optional().default(""),
   motionId: z.string().trim().optional().default(""),
   supportPhoneNumber: z.string().trim().min(5, "Support phone is required."),
-  userPhoneNumber: z.string().trim().min(5, "User phone is required."),
+  userPhoneNumber: z.string().trim().optional().default(""),
   userEmail: z.string().trim().email().optional().or(z.literal("")).default(""),
   sourceTag: z.string().trim().optional().default(""),
 });

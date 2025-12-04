@@ -8,7 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '@core/services/auth/auth.service';
 import { getItem } from '@core/store/session.store';
 import { AuthConstants } from '@core/constants/auth.constants';
@@ -28,6 +28,8 @@ import { UserManagementService } from './services/user-management.service';
 import { forkJoin, finalize } from 'rxjs';
 import { LoaderComponent } from '@core/components/loader/loader';
 import { LoaderService } from '@core/services/loading.service';
+import { SupportService } from '@core/services/support.service';
+import { SupportCalloutDialogComponent } from '@core/components/support-callout/support-callout-dialog/support-callout-dialog';
 
 @Component({
   selector: 'app-user-management',
@@ -35,11 +37,13 @@ import { LoaderService } from '@core/services/loading.service';
     CommonModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
     MotionBackgroundComponent,
     ProfileTabComponent,
     DocumentsTabComponent,
     AccountDetailsTabComponent,
     LoaderComponent,
+    SupportCalloutDialogComponent,
   ],
   templateUrl: './user-management.component.html',
   styleUrl: './user-management.component.scss',
@@ -47,9 +51,10 @@ import { LoaderService } from '@core/services/loading.service';
 })
 export class UserManagementComponent implements OnInit {
   private authService = inject(AuthService);
-  private router = inject(Router);
   private userManagementService = inject(UserManagementService);
   private loaderService = inject(LoaderService);
+  private supportService = inject(SupportService);
+  private dialog = inject(MatDialog);
 
   //Signal to track the currently active tab view.
   protected activeTab = signal<ActiveTab>('profile');
@@ -108,7 +113,20 @@ export class UserManagementComponent implements OnInit {
     await this.authService.signOut();
   }
 
-  motionSupport() {
-    this.router.navigate(['/support']);
+  async openSupport() {
+    const context = await this.supportService.getOptionalUserContext();
+
+    this.dialog.open(SupportCalloutDialogComponent, {
+      width: '420px',
+      data: {
+        preMessage: 'Account management support request',
+        name: this.displayName || context.name || '',
+        motionId: this.profile()?.motionId || context.motionId || '',
+        sourceTag: 'Account Management',
+        initialUserEmail: context.email,
+        initialUserName: context.name,
+        initialMotionId: context.motionId,
+      },
+    });
   }
 }

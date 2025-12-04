@@ -16,7 +16,7 @@ type SupportCalloutResponse = {
   UserError?: string;
   Message?: string;
   Link?: string;
-  Data?: { link?: string; supportPhone?: string; userPhone?: string };
+  Data?: { link?: string; supportPhone?: string };
 };
 
 @Injectable({
@@ -125,55 +125,6 @@ export class SupportService {
     }
   }
 
-  private async getUserPhoneNumber(): Promise<SupportReturn> {
-    try {
-      const { data: session } = await this.supabase.auth.getSession();
-      const userId = session.session?.user?.id;
-
-      if (!userId) {
-        return {
-          HasErrors: true,
-          Error: 'No authenticated user found.',
-          UserError: 'Please sign in again to contact support.',
-        };
-      }
-
-      const { data, error } = await this.supabase
-        .from(SupabaseTables.USERS)
-        .select('phone_number')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) {
-        return {
-          HasErrors: true,
-          Error: error.message || 'Unable to fetch your phone number.',
-          UserError: this.userErrorMessage,
-        };
-      }
-
-      if (!data?.phone_number) {
-        return {
-          HasErrors: true,
-          Error: 'User phone number is missing.',
-          UserError: this.userErrorMessage,
-        };
-      }
-
-      return {
-        HasErrors: false,
-        Data: { phoneNumber: data.phone_number },
-      };
-    } catch (e: any) {
-      return {
-        HasErrors: true,
-        Error:
-          e?.message || 'Unexpected error while fetching your phone number.',
-        UserError: this.userErrorMessage,
-      };
-    }
-  }
-
   async sendSupportRequest(payload: SupportType): Promise<SupportReturn> {
     const supportNumberResult = await this.getSupportPhoneNumber();
     if (supportNumberResult.HasErrors) return supportNumberResult;
@@ -184,17 +135,6 @@ export class SupportService {
     const resolvedName = payload.name || context.name || '';
     const resolvedMotionId = payload.motionId || context.motionId || '';
     const resolvedEmail = payload.userEmail || context.email || '';
-
-    let userPhoneNumber = payload.userPhoneNumber?.trim() || '';
-    if (!userPhoneNumber) {
-      userPhoneNumber = context.phone || '';
-    }
-
-    if (!userPhoneNumber) {
-      const userPhoneResult = await this.getUserPhoneNumber();
-      if (userPhoneResult.HasErrors) return userPhoneResult;
-      userPhoneNumber = userPhoneResult.Data?.phoneNumber;
-    }
 
     try {
       const { data, error } =
@@ -207,7 +147,6 @@ export class SupportService {
               name: resolvedName,
               motionId: resolvedMotionId,
               supportPhoneNumber,
-              userPhoneNumber,
               sourceTag: payload.sourceTag || '',
               userEmail: resolvedEmail,
             },

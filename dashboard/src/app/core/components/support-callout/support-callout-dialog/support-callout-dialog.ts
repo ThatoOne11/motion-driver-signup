@@ -22,8 +22,6 @@ type SupportDialogData = {
   name?: string;
   motionId?: string;
   sourceTag?: string;
-  requirePhone?: boolean;
-  initialUserPhone?: string | null;
   initialUserEmail?: string | null;
   initialUserName?: string | null;
   initialMotionId?: string | null;
@@ -47,28 +45,12 @@ export class SupportCalloutDialogComponent {
   private readonly supportService = inject(SupportService);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly dialogRef = inject(MatDialogRef<SupportCalloutDialogComponent>);
-  private requirePhoneFlag = false;
 
   form = this.fb.nonNullable.group({
     userMessage: ['', [Validators.required, Validators.maxLength(500)]],
-    userPhoneNumber: this.fb.control('', { nonNullable: true }),
   });
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: SupportDialogData) {
-    this.requirePhoneFlag =
-      data?.requirePhone === true || !data?.initialUserPhone;
-
-    const phoneValidators = this.requirePhoneFlag
-      ? [Validators.required, Validators.pattern(/^[0-9+(). -]{7,}$/)]
-      : [];
-    this.form.setControl(
-      'userPhoneNumber',
-      this.fb.control(data?.initialUserPhone ?? '', {
-        validators: phoneValidators,
-        nonNullable: true,
-      }),
-    );
-
     // If we have initial user context, prefer those values in payload defaults.
     if (data?.initialUserName) {
       this.data.name = this.data.name || data.initialUserName;
@@ -76,10 +58,6 @@ export class SupportCalloutDialogComponent {
     if (data?.initialMotionId) {
       this.data.motionId = this.data.motionId || data.initialMotionId;
     }
-  }
-
-  get requirePhone(): boolean {
-    return this.requirePhoneFlag;
   }
 
   loading = false;
@@ -114,9 +92,6 @@ export class SupportCalloutDialogComponent {
       motionId: this.data?.motionId || this.data?.initialMotionId || '',
       userEmail: this.data?.initialUserEmail || '',
       sourceTag: this.data?.sourceTag || '',
-      userPhoneNumber: this.requirePhone
-        ? (this.form.value.userPhoneNumber ?? '')
-        : (this.data?.initialUserPhone ?? undefined),
     };
 
     try {

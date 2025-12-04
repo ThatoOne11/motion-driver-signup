@@ -34,6 +34,11 @@ function errorResponse(message: string, status: keyof typeof ResponseStatuses) {
 }
 
 Deno.serve(async (req) => {
+
+  if (req.method === "OPTIONS") {
+      return new Response("ok", ResponseStatuses.Ok);
+    }
+    
   if (req.method !== "POST") {
     return errorResponse("Method not allowed", "BadRequest");
   }
@@ -58,10 +63,9 @@ Deno.serve(async (req) => {
   const payload = parsed.data;
 
   const supportPhone = sanitizePhone(payload.supportPhoneNumber);
-  const userPhone = sanitizePhone(payload.userPhoneNumber);
 
-  if (!supportPhone || !userPhone) {
-    return errorResponse("Invalid phone numbers provided.", "BadRequest");
+  if (!supportPhone) {
+    return errorResponse("Invalid support phone number provided.", "BadRequest");
   }
 
   const lines = [
@@ -70,7 +74,6 @@ Deno.serve(async (req) => {
     payload.name ? `Name: ${payload.name}` : null,
     payload.motionId ? `Motion ID: ${payload.motionId}` : null,
     payload.userEmail ? `Driver email: ${payload.userEmail}` : null,
-    userPhone ? `Driver phone: ${userPhone}` : null,
     payload.sourceTag ? `Source: ${payload.sourceTag}` : null,
   ].filter(Boolean);
 
@@ -82,7 +85,7 @@ Deno.serve(async (req) => {
     Message: "WhatsApp link created.",
     Error: undefined,
     ErrorList: [],
-    Data: { link, supportPhone, userPhone },
+    Data: { link, supportPhone },
     Link: link,
   };
 
